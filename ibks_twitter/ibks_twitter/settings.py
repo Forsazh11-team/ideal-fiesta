@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users'
+    'users',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,4 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'users/static')]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

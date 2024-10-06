@@ -17,42 +17,33 @@
                 <h1>Регистрация в IBKSTwitter</h1>
                 <form method="POST" id="register-form">
                     {% csrf_token %}
-                    {{ form.non_field_errors }}  <!-- Общие ошибки формы -->
-
                     <div class="form-group">
                         <label for="id_username">Имя пользователя</label>
                         <input type="text" id="id_username" name="username" required>
-                        {{ form.username.errors }}  <!-- Ошибки для поля username -->
                     </div>
 
                     <div class="form-group">
                         <label for="id_email">Email</label>
                         <input type="email" id="id_email" name="email" required>
-                        {{ form.email.errors }}  <!-- Ошибки для поля email -->
                     </div>
 
                     <div class="form-group">
                         <label for="id_password1">Пароль</label>
                         <input type="password" id="id_password1" name="password1" required>
-                        {{ form.password1.errors }}  <!-- Ошибки для поля password1 -->
                     </div>
 
                     <div class="form-group">
                         <label for="id_password2">Подтвердите пароль</label>
                         <input type="password" id="id_password2" name="password2" required>
-                        {{ form.password2.errors }}  <!-- Ошибки для поля password2 -->
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.captcha.id_for_label }}">CAPTCHA</label>
+                        {{ form.captcha }}
                     </div>
 
                     <button type="submit">Зарегистрироваться</button>
                     <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
                 </form>
-                {% if messages %}
-                    <div class="messages">
-                        {% for message in messages %}
-                            <p class="message">{{ message }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
         </div>
     </div>
