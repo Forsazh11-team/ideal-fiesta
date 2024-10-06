@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>IBKSTwitter - Ввод кода</title>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            <img src="{% static 'img/start.jpg' %}" alt="Twitter Logo" class="logo">
+        </div>
+        <div class="welcome-section">
+            <div class="register-container">
+                <h1>Введите код</h1>
+                <form method="POST" id="code-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_code">Код из сообщения:</label>
+                        <input type="text" id="id_code" name="Code" required>
+                    </div>
+                    <button type="submit">Подтвердить</button>
+                    <button type="login" onclick="window.location.href='/login';">Вернуться</button>
+                </form>
+                <div class="messages">
+                    {% if error %}
+                        <p class="message">{{ error }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
