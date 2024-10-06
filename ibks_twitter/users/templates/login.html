@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>IBKSTwitter - Вход</title>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            {% load static %}
+            <img src="{% static 'img/start.jpg' %}" alt="Twitter Logo" class="logo">
+        </div>
+        <div class="welcome-section">
+            <div class="login-container">
+                <h1>Вход в IBKSTwitter</h1>
+                <form id="login-form">
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Пароль" required>
+                    <button type="submit">Войти</button>
+                    <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
