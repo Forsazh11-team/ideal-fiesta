@@ -1,0 +1,2 @@
+To activate the account {{ username }} - click on the link{{ link }}
+The link will expire {{ expiry|time:"TIME_FORMAT" }}
