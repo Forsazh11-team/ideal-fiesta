@@ -21,6 +21,7 @@ from blog import views as blog_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include('users.urls')),
-    path("home/", blog_views.home)
-    #path('captcha/', include('captcha.urls')),
+    path("home/", blog_views.home),
+    path("profile/<username>", blog_views.user_account),
+    path("")
 ]

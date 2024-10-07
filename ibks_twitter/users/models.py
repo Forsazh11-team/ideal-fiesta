@@ -29,6 +29,13 @@ class Profile(models.Model):
     def following(self):
         return Follow.objects.filter(user=self.user).count()
 
+    def set_location(self, location):
+        self.location = location
+    def set_about(self, about):
+        self.about = about
+    def set_image(self, image):
+        pass
+
 
 class Follow(models.Model):
     user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE)
@@ -39,6 +46,5 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         user_profile = Profile(user=instance)
         user_profile.save()
-
 
 post_save.connect(create_profile, sender=User)

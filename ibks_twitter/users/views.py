@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from gitdb.utils.encoding import force_text
-from .models import OTP
+from .models import OTP, Profile
 from .token import email_verification_token
 from .forms import UserRegisterForm
 import pyotp
@@ -23,7 +23,6 @@ def confirmation_view(request, status):
         'invalid': 'Activation link is invalid!',
         'email_sent': 'A confirmation email has been sent to the specified email address. Check your email to complete the registration.'
     }
-    
     message = messages.get(status, 'Unknown status.')
     return render(request, 'confirm.html', {'message': message})
 
@@ -126,3 +125,27 @@ def activate(request, uidb64, token):
         return confirmation_view(request, 'success')
     else:
         return confirmation_view(request, 'invalid')
+
+
+def update_profile(request, uidb64):
+    pass
+    # err_mes = ""
+    # if request.method == 'PUT':
+    #     User = get_user_model()
+    #     try:
+    #         uid = force_text(urlsafe_base64_decode(uidb64))
+    #         user = User.objects.get(pk=uid)
+    #         image = request.session.get('image')
+    #         location = request.session.get('location')
+    #         about = request.session.get('about')
+    #         profile = Profile.objects.filter(user=user).first()
+    #         if profile:
+    #             profile.set_location(location)
+    #             profile.set_about(about)
+    #             profile.set_image(image)
+    #             profile.save()
+    #             return
+    #
+    #     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+    #         user = None
+    # return
