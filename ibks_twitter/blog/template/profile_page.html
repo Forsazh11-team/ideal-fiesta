@@ -37,12 +37,12 @@
         </ul>
     </div>
     <div class="navbar-right">
-        <img src="{% static 'img/start.jpg' %}" class="nav-profile-img" onclick="toggleMenu()">
+        <img src="{{auth_user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
     </div>
     <div class="profile-menu-wrap" id="profileMenu">
         <div class="profile-menu">
             <div class="user-info">
-                <img src="{% static 'img/start.jpg' %}" alt="">
+                <img src="{{auth_user.profile.image.url}}" alt="">
                 <div>
                     <h3><a href="/{{auth_user.username}}" class="profile-menu-links">{{auth_user.username}}</a></h3>
                 </div>
