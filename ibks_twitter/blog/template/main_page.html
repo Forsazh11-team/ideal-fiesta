@@ -75,7 +75,7 @@
         </div>
         {% if flag_posts %}
          {% for tweet in tweets %}
-        <div class="post">
+         <div class="post">
             <div class="post-author">
                 <img src=" {{ tweet.author.profile.image.url }}">
                 <div>
@@ -99,9 +99,9 @@
                     <span>Share</span>
                 </div>
             </div>
-            {% endfor %}
-            {% endif %}
-        </div>
+         </div>
+         {% endfor %}
+         {% endif %}
     </div>
         <div class="right-sidebar">
             <div class="subscriptions-panel">
