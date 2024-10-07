@@ -16,6 +16,17 @@ from .forms import UserRegisterForm
 import pyotp
 from random import randint
 
+
+def confirmation_view(request, status):
+    messages = {
+        'success': 'Thank you for your email confirmation. Now you can <a href="/login">login</a> your account.',
+        'invalid': 'Activation link is invalid!',
+        'email_sent': 'A confirmation email has been sent to the specified email address. Check your email to complete the registration.'
+    }
+    
+    message = messages.get(status, 'Unknown status.')
+    return render(request, 'confirm.html', {'message': message})
+
 def login_view(request):
     error_message = ""
     if request.method == 'POST':
@@ -68,7 +79,7 @@ def opt(request):
                 user = otp_obj.user
                 if user:
                     login(request, user)
-                    return HttpResponse('Success.')
+                    return render(request, "main_page.html")
                 else:
                     return redirect('/login')
             else:
@@ -99,8 +110,7 @@ def register(request):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-
-            return HttpResponse('Please confirm your email address to complete the registration')
+            return confirmation_view(request, 'email_sent')
         else:
             print(form)
     else:
@@ -117,6 +127,6 @@ def activate(request, uidb64, token):
     if user is not None and email_verification_token.check_token(user, token):
         user.is_active = True
         user.save()
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        return confirmation_view(request, 'success')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return confirmation_view(request, 'invalid')

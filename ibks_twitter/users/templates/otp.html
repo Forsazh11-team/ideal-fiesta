@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <title>IBKSTwitter - Ввод кода</title>
 </head>
 <body>
@@ -14,15 +14,15 @@
         </div>
         <div class="welcome-section">
             <div class="register-container">
-                <h1>Введите код</h1>
+                <h1>Code has been send to your email adress.</h1>
                 <form method="POST" id="code-form">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="id_code">Код из сообщения:</label>
+                        <label for="id_code">Enter the code:</label>
                         <input type="text" id="id_code" name="Code" required>
                     </div>
-                    <button type="submit">Подтвердить</button>
-                    <button type="login" onclick="window.location.href='/login';">Вернуться</button>
+                    <button type="submit">Submit</button>
+                    <p><a href="/login">Return to login page</a></p>
                 </form>
                 <div class="messages">
                     {% if error %}
