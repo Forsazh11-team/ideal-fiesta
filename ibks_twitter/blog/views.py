@@ -56,6 +56,7 @@ class Profile_list_view(ListView):
             print("No...")
             data['flag_posts'] = False
         data['user'] = user
+        data['auth_user'] = self.request.user
         return data
 
 
