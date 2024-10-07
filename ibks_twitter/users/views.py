@@ -16,19 +16,16 @@ from .forms import UserRegisterForm
 import pyotp
 from random import randint
 
+
 def confirmation_view(request, status):
     messages = {
-        'success': 'Подтверждение успешно. Можете <a href="/login">войти</a> в свой аккаунт.',
-        'invalid': 'Ссылка невалидна.',
-        'email_sent': 'На указанную почту выслано письмо для подтверждения.'
+        'success': 'Thank you for your email confirmation. Now you can <a href="/login">login</a> your account.',
+        'invalid': 'Activation link is invalid!',
+        'email_sent': 'A confirmation email has been sent to the specified email address. Check your email to complete the registration.'
     }
     
-    message = messages.get(status, 'Некорректный статус.')
+    message = messages.get(status, 'Unknown status.')
     return render(request, 'confirm.html', {'message': message})
-
-
-def login(request):
-    return render(request, "login.html", {})
 
 def login_view(request):
     error_message = ""
@@ -82,7 +79,7 @@ def opt(request):
                 user = otp_obj.user
                 if user:
                     login(request, user)
-                    return HttpResponse('Success.')
+                    return render(request, "main_page.html")
                 else:
                     return redirect('/login')
             else:
