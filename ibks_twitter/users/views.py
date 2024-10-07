@@ -13,6 +13,17 @@ from .token import EmailVerificationTokenGenerator, email_verification_token
 
 from .forms import UserRegisterForm
 
+def confirmation_view(request, status):
+    messages = {
+        'success': 'Подтверждение успешно. Можете <a href="/login">войти</a> в свой аккаунт.',
+        'invalid': 'Ссылка невалидна.',
+        'email_sent': 'На указанную почту выслано письмо для подтверждения.'
+    }
+    
+    message = messages.get(status, 'Некорректный статус.')
+    return render(request, 'confirm.html', {'message': message})
+
+
 def login(request):
     return render(request, "login.html", {})
 
@@ -36,7 +47,7 @@ def register(request):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            return HttpResponse('Please confirm your email address to complete the registration')
+            return confirmation_view(request, 'email_sent')
         else:
             print(form)
     else:
@@ -53,6 +64,6 @@ def activate(request, uidb64, token):
     if user is not None and email_verification_token.check_token(user, token):
         user.is_active = True
         user.save()
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        return confirmation_view(request, 'success')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return confirmation_view(request, 'invalid')

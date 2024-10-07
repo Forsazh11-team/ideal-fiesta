@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <title>IBKSTwitter - Вход</title>
 </head>
 <body>
@@ -17,8 +17,14 @@
             <div class="login-container">
                 <h1>Вход в IBKSTwitter</h1>
                 <form id="login-form">
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Пароль" required>
+                     <div class="form-group">
+                        <label for="id_email">Email</label>
+                        <input type="email" id="id_email" name="email" required>
+                    </div>
+                      <div class="form-group">
+                        <label for="id_password1">Пароль</label>
+                        <input type="password" id="id_password1" name="password1" required>
+                    </div>
                     <button type="submit">Войти</button>
                     <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
                 </form>
