@@ -47,7 +47,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ibkstwitter@gmail.com'
-EMAIL_HOST_PASSWORD = '********'
+EMAIL_HOST_PASSWORD = 'eoxw smdu fimg pdix'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -126,7 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'users/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'users/static'), os.path.join(BASE_DIR, 'blog/static')]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
