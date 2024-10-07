@@ -109,11 +109,10 @@
                 <ul class="subscriptions-list">
                     {% for user in object_list %}
                     <li class="subscription-item">
-                        <div>
-                            <img style="width: 20px; height: 20px;"
-                                 src="{{ user.follow_user.profile.image.url }}">
-                            <a>{{ user.follow_user.username }}</a>
-                        </div>
+                       <button onclick="location.href='/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
+                        <img style="width: 20px; height: 20px;" src="{{ user.follow_user.profile.image.url }}">
+                        <span>{{ user.follow_user.username }}</span>
+                        </button>
                     </li>
                     {% endfor %}
                 </ul>
