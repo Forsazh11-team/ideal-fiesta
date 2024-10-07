@@ -77,7 +77,7 @@
          {% for tweet in tweets %}
         <div class="post">
             <div class="post-author">
-                <img src="{% static 'img/start.jpg' %}">
+                <img src=" {{ tweet.author.profile.image.url }}">
                 <div>
                     <h1>{{tweet.author.username}}</h1>
                     <small>{{tweet.date_posted}}</small>
@@ -111,7 +111,7 @@
                     <li class="subscription-item">
                         <div>
                             <img style="width: 20px; height: 20px;"
-                                 src="{{ user.follow_user.profile.image }}">
+                                 src="{{ user.follow_user.profile.image.url }}">
                             <a>{{ user.follow_user.username }}</a>
                         </div>
                     </li>

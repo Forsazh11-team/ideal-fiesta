@@ -16,7 +16,7 @@ class OTP(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='user.png', upload_to='img')
+    image = models.ImageField(default='user.png/', upload_to='img')
     location = models.CharField(max_length=30, default="")
     about = models.CharField(max_length=150, default="")
     def __str__(self):
