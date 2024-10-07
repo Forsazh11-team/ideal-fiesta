@@ -734,3 +734,17 @@ a{
 .stat-item span {
     font-weight: 500; /* Make the text bold */
 }
+
+.create-post-form {
+    display: flex;
+    flex-direction: column; /* Располагаем элементы по вертикали */
+    padding: 15px; /* Внутренние отступы */
+    background-color: #ffffff; /* Цвет фона формы */
+    border-radius: 8px; /* Закругление углов формы */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень */
+    margin-bottom: 20px;
+}
+
+.create-post-input {
+    margin-bottom: 10px; /* Отступ между вводом и кнопкой */
+}

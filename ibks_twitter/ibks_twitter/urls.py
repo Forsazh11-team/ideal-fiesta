@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from blog import views as blog_views
 
+from blog.views import Home_list_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include('users.urls')),
-    path("home/", blog_views.home),
-    path("profile/<username>", blog_views.user_account),
-    path("")
+    path("home/", Home_list_view.as_view()),
+    path("home/tweet", blog_views.tweet_view),
 ]

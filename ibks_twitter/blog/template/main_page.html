@@ -62,27 +62,31 @@
    <div class="container">
     <div class="main">
         <div class="create-post">
-            <div class="create-post-input">
-                <img src="{% static 'img/start.jpg' %}">
-                <textarea rows="1" placeholder="Say something to world!" oninput="autoResize(this)"></textarea>
-            </div>
-            <div class="create-post-links">
-                <li>Post</li>
-            </div>
+<!--            <form class="create-post-form" action="/home/tweet" method="POST">-->
+<!--                {% csrf_token %}-->
+<!--                <div class="create-post-input">-->
+<!--                    <img src="{{user.image}}">-->
+<!--                    <input type="text" name="content" placeholder="Say something to world!" oninput="autoResize(this)" required>-->
+<!--                </div>-->
+<!--                <div class="create-post-links">-->
+<!--                    <button type="submit">Tweet</button>-->
+<!--                </div>-->
+<!--            </form>-->
         </div>
+        {% if flag_posts %}
+         {% for tweet in tweets %}
         <div class="post">
             <div class="post-author">
                 <img src="{% static 'img/start.jpg' %}">
                 <div>
-                    <h1>Some user</h1>
-                    <small>1 hour ago</small>
+                    <h1>{{tweet.author.username}}</h1>
+                    <small>{{tweet.date_posted}}</small>
                 </div>
             </div>
-            <p>keklol</p>
-            <img src="{% static 'img/start.jpg' %}" width="100%">
+            {{tweet.content}}
             <div class="post-stats">
                 <div>
-                    <span>22 comments &middot; 40 shares</span>
+                    <span>{{tweet.likes}} likes</span>
                 </div>
             </div>
             <div class="post-activity">
@@ -95,41 +99,23 @@
                     <span>Share</span>
                 </div>
             </div>
-            <div class="comments-section">
-                <h3>Comments</h3>
-                <ul class="comments-list">
-                    <li class="comment-item">
-                        <img src="{% static 'img/start.jpg' %}" class="comment-user-image" alt="User 1">
-                        <div class="comment-content">
-                            <strong>User1</strong>
-                            <p>User comment</p>
-                        </div>
-                    </li>
-                </ul>
-                <div class="add-comment">
-                    <img src="{% static 'img/start.jpg' %}" class="comment-user-image" alt="User 1">
-                    <textarea class="comment-input" rows="1" placeholder="Leave a comment..."></textarea>
-                    <button class="submit-comment">Comment</button>
-                </div>
-            </div>
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
         <div class="right-sidebar">
             <div class="subscriptions-panel">
                 <h3>Your Followings</h3>
                 <ul class="subscriptions-list">
+                    {% for user in object_list %}
                     <li class="subscription-item">
-                        <img src="{% static 'img/start.jpg' %}" class="subscription-avatar">
-                        <span class="subscription-name">User1</span>
+                        <div>
+                            <img style="width: 20px; height: 20px;"
+                                 src="{{ user.follow_user.profile.image }}">
+                            <a>{{ user.follow_user.username }}</a>
+                        </div>
                     </li>
-                    <li class="subscription-item">
-                        <img src="{% static 'img/start.jpg' %}" class="subscription-avatar">
-                        <span class="subscription-name">User2</span>
-                    </li>
-                <li class="subscription-item">
-                    <img src="{% static 'img/start.jpg' %}" class="subscription-avatar">
-                    <span class="subscription-name">User3</span>
-                </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -139,6 +125,7 @@
     function toggleMenu(){
         profileMenu.classList.toggle("open-menu");
     }
+
 
     // Функция для открытия/закрытия меню профиля
     function toggleMenu() {
