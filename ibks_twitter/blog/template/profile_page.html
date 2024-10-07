@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>Profile page</title>
+    <link rel="stylesheet"  href="{% static 'css/style.css' %}">
+</head>
+<body>
+   <nav class="navbar">
+    <div class="navbar-left">
+        {% load static %}
+        <a href="index.html" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <div class="searchbox">
+            <img src="{% static 'img/search.png' %}">
+            <input type="text" placeholder="Search">
+        </div>
+    </div>
+    <div class="navbar-center">
+        <ul>
+            <li class="notification-icon">
+                <a href="#" id="notification-button">
+                    <img src="{% static 'img/bell.png' %}">
+                    <span>Notifications</span>
+                </a>
+                <!-- Всплывающее окно с уведомлениями -->
+                <div id="notification-popup" class="notification-popup">
+                    <h4>Notifications</h4>
+                    <ul>
+                        <li><a href="#">New friend request</a></li>
+                        <li><a href="#">Message from John</a></li>
+                        <li><a href="#">Your post got a like!</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-right">
+        <img src="{% static 'img/start.jpg' %}" class="nav-profile-img" onclick="toggleMenu()">
+    </div>
+    <div class="profile-menu-wrap" id="profileMenu">
+        <div class="profile-menu">
+            <div class="user-info">
+                <img src="{% static 'img/start.jpg' %}" alt="">
+                <div>
+                    <h3><a href="#" class="profile-menu-links">Username</a></h3>
+                </div>
+            </div>
+            <a href="#" class="profile-menu-links">
+                <img src="{% static 'img/settings.png' %}" alt="">
+                <p>Settings</p>
+            </a>
+            <a href="#" class="profile-menu-links">
+                <img src="{% static 'img/logout.png' %}" alt="">
+                <p>Logout</p>
+            </a>
+        </div>
+    </div>
+
+   </nav>
+   <div class="container">
+    <div class="main">
+        <div class="profile-header">
+            <div class="profile-background"></div>
+            <img src="{% static 'img/start.jpg' %}" alt="Profile Picture" class="profile-pic">
+            <div class="profile-info">
+                <h2>Username</h2>
+                <p><a href="#">Location</a></p>
+                <div class="followers">
+                <div>
+                    <img src="{% static 'img/start.jpg' %}" alt="">
+                    <img src="{% static 'img/start.jpg' %}" alt="">
+                    <img src="{% static 'img/start.jpg' %}" alt="">
+                    <span class="following-users">are following this user</span>
+                </div>
+                </div>
+                <div class="stats-panel">
+                    <div class="stat-item">
+                        <span>Followers: <strong>100</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Following: <strong>50</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Posts: <strong>20</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="create-post">
+            <div class="create-post-input">
+                <img src="{% static 'img/start.jpg' %}">
+                <textarea rows="1" placeholder="Say something to world!" oninput="autoResize(this)"></textarea>
+            </div>
+            <div class="create-post-links">
+                <li>Post</li>
+            </div>
+        </div>
+        <div class="post">
+            <div class="post-author">
+                <img src="{% static 'img/start.jpg' %}">
+                <div>
+                    <h1>Some user</h1>
+                    <small>1 hour ago</small>
+                </div>
+            </div>
+            <p>keklol</p>
+            <img src="{% static 'img/start.jpg' %}" width="100%">
+            <div class="post-stats">
+                <div>
+                    <span>22 comments &middot; 40 shares</span>
+                </div>
+            </div>
+            <div class="post-activity">
+                <div class="post-activity-link">
+                    <img src="{% static 'img/like.png' %}" alt="">
+                    <span>Like</span>
+                </div>
+                <div class="post-activity-link">
+                    <img src="{% static 'img/share.png' %}" alt="">
+                    <span>Share</span>
+                </div>
+            </div>
+            <div class="comments-section">
+                <h3>Comments</h3>
+                <ul class="comments-list">
+                    <li class="comment-item">
+                        <img src="{% static 'img/start.jpg' %}" class="comment-user-image" alt="User 1">
+                        <div class="comment-content">
+                            <strong>User1</strong>
+                            <p>User comment</p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="add-comment">
+                    <img src="{% static 'img/start.jpg' %}" class="comment-user-image" alt="User 1">
+                    <textarea class="comment-input" rows="1" placeholder="Leave a comment..."></textarea>
+                    <button class="submit-comment">Comment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="right-sidebar">
+            <div class="subscriptions-panel">
+                <h3>Your Followings</h3>
+                <ul class="subscriptions-list">
+                    <li class="subscription-item">
+                        <img src="{% static 'img/start.jpg' %}" class="subscription-avatar">
+                        <span class="subscription-name">User1</span>
+                    </li>
+                    <li class="subscription-item">
+                        <img src="{% static 'img/start.jpg' %}" class="subscription-avatar">
+                        <span class="subscription-name">User2</span>
+                    </li>
+                <li class="subscription-item">
+                    <img src="{% static 'img/start.jpg' %}" class="subscription-avatar">
+                    <span class="subscription-name">User3</span>
+                </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<script>
+    let profileMenu = document.getElementById("profileMenu");
+    function toggleMenu(){
+        profileMenu.classList.toggle("open-menu");
+    }
+
+    // Функция для открытия/закрытия меню профиля
+    function toggleMenu() {
+        var menu = document.getElementById("profileMenu");
+        menu.classList.toggle("open-menu");
+    }
+
+    // Закрываем меню при клике вне его
+    document.addEventListener("click", function(event) {
+    var menu = document.getElementById("profileMenu");
+    var profileImage = document.querySelector(".nav-profile-img");
+    // Проверяем, если клик был за пределами меню и изображения профиля
+    if (!menu.contains(event.target) && !profileImage.contains(event.target)) {
+        menu.classList.remove("open-menu"); // Закрываем меню
+    }
+    });
+
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // Сбрасываем высоту
+        textarea.style.height = textarea.scrollHeight + 'px'; // Устанавливаем новую высоту
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+    const notificationButton = document.getElementById("notification-button");
+    const notificationPopup = document.getElementById("notification-popup");
+
+    // Функция для переключения видимости окна
+    function toggleNotification() {
+        notificationPopup.classList.toggle("show");
+    }
+
+    // Открываем/закрываем уведомления при клике на иконку
+    notificationButton.addEventListener("click", function(event) {
+        event.stopPropagation(); // Останавливаем всплытие события, чтобы клик по кнопке не закрывал окно
+        toggleNotification();
+    });
+
+    // Закрываем уведомления при клике в любом другом месте страницы
+    document.addEventListener("click", function(event) {
+        // Проверяем, находится ли клик вне области окна с уведомлениями
+        if (!notificationPopup.contains(event.target) && notificationPopup.classList.contains("show")) {
+            notificationPopup.classList.remove("show");
+        }
+    });
+});
+
+</script>
+</body>

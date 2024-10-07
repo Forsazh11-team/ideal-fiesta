@@ -77,7 +77,7 @@ def opt(request):
                 user = otp_obj.user
                 if user:
                     login(request, user)
-                    return render(request, "main_page.html")
+                    return render(request, "edit_page.html")
                 else:
                     return redirect('/login')
             else:

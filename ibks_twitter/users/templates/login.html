@@ -19,7 +19,7 @@
                 <form method="POST" id="login-form">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="id_email">Email</label>
+                        <label for="id_email">Электронный адрес</label>
                         <input type="email" id="id_email" name="email" required>
                     </div>
                     <div class="form-group">
@@ -28,7 +28,7 @@
                     </div>
                     <button type="submit">Войти</button>
                     <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
-                    <p>Зaбыли пароль? <a href="{% url 'reset_password' %}">Сброс пароля</a></p>
+                    <p>Забыли пароль? <a href="{% url 'reset_password' %}">Сброс пароля</a></p>
                 </form>
             </div>
         </div>
