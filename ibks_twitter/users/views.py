@@ -77,7 +77,7 @@ def opt(request):
                 user = otp_obj.user
                 if user:
                     login(request, user)
-                    return render(request, "edit_page.html")
+                    return redirect('/home')
                 else:
                     return redirect('/login')
             else:
@@ -126,5 +126,3 @@ def activate(request, uidb64, token):
         return confirmation_view(request, 'success')
     else:
         return confirmation_view(request, 'invalid')
-def reset_password(request):
-    pass

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'users',
     'captcha',
     'django_email_verification',
+    'blog'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -64,7 +65,7 @@ ROOT_URLCONF = 'ibks_twitter.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'users/template'), os.path.join(BASE_DIR, 'blog/template')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
