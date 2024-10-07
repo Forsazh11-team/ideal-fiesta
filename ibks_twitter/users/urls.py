@@ -2,8 +2,9 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path("", views.register, name = "register"),
-    path("login/", views.login, name = "login"),
+    path("", views.register, name="register"),
+    path("login/", views.login_view, name="login"),
+    path("login/otp", views.opt, name="otp"),
     path('captcha/', include('captcha.urls')),
     path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name='activate'),
     path('confirmation/<str:status>/', views.confirmation_view, name='confirmation'),
