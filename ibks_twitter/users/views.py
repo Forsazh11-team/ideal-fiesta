@@ -60,8 +60,6 @@ def login_view(request):
             error_message = "Invalid login or password"
 
     return render(request, "login.html", {'error_message': error_message})
-
-
 def opt(request):
     err_mes = ""
     if request.method == 'POST':
@@ -89,7 +87,6 @@ def opt(request):
             return redirect('/login')
 
     return render(request, "otp.html", {})
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -116,7 +113,6 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
-
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
@@ -130,3 +126,5 @@ def activate(request, uidb64, token):
         return confirmation_view(request, 'success')
     else:
         return confirmation_view(request, 'invalid')
+def reset_password(request):
+    pass
