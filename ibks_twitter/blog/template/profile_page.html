@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <title>Home page</title>
+    <title>Profile page</title>
     <link rel="stylesheet"  href="{% static 'css/style.css' %}">
 </head>
 <body>
@@ -61,6 +61,33 @@
    </nav>
    <div class="container">
     <div class="main">
+        <div class="profile-header">
+            <div class="profile-background"></div>
+            <img src="{% static 'img/start.jpg' %}" alt="Profile Picture" class="profile-pic">
+            <div class="profile-info">
+                <h2>Username</h2>
+                <p><a href="#">Location</a></p>
+                <div class="followers">
+                <div>
+                    <img src="{% static 'img/start.jpg' %}" alt="">
+                    <img src="{% static 'img/start.jpg' %}" alt="">
+                    <img src="{% static 'img/start.jpg' %}" alt="">
+                    <span class="following-users">are following this user</span>
+                </div>
+                </div>
+                <div class="stats-panel">
+                    <div class="stat-item">
+                        <span>Followers: <strong>100</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Following: <strong>50</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Posts: <strong>20</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="create-post">
             <div class="create-post-input">
                 <img src="{% static 'img/start.jpg' %}">
@@ -184,5 +211,6 @@
         }
     });
 });
+
 </script>
 </body>

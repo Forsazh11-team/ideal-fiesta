@@ -35,6 +35,11 @@ a{
     display: block;
 }
 
+.navbar-right img{
+    height: 40px;
+    width: 40px;
+}
+
 .navbar-center ul li{
     display: inline-block;
     list-style: none;
@@ -65,8 +70,62 @@ a{
     transition: width 0.3s;
 }
 
+
 .navbar-center ul li a:hover::after {
     width: 100%;
+}
+
+/* Для контейнера уведомлений */
+.notification-icon {
+    position: relative; /* Для позиционирования всплывающего окна относительно иконки */
+}
+
+.notification-popup {
+    display: none; /* Изначально скрываем окно */
+    position: absolute;
+    top: 50px; /* Отступ от иконки вниз */
+    right: 0;
+    background-color: white;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 100;
+    padding: 10px;
+}
+
+.notification-popup h4 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.notification-popup ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-popup ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.notification-popup ul li:last-child {
+    border-bottom: none;
+}
+
+.notification-popup ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.notification-popup ul li a:hover {
+    background-color: #f9f9f9;
+}
+
+/* Показываем всплывающее окно при добавлении класса show */
+.notification-popup.show {
+    display: block;
 }
 
 .nav-profile-img{
@@ -122,6 +181,7 @@ a{
 }
 
 .sidebar-profilebox{
+    margin-top: 10px;
     background: #1da1f2;
     border-radius: 10px; /* Закругление углов кнопки */
 }
@@ -129,7 +189,6 @@ a{
 .sidebar-profileinfo{
     position: relative; /* Для расположения элементов поверх фона */
     z-index: 1; /* Отправляем информацию на передний план */
-    padding: 20px; /* Отступы для контента */
     color: white; /* Цвет текста, чтобы он был виден на синем фоне */
     padding: 4px 25px;
 }
@@ -144,7 +203,7 @@ a{
     padding: 2px;
 }
 
-.sidebar-profileinfo h1{
+.sidebar-profileinfo h1 {
     font-size: 20px;
     font-weight: 600;
     color: #fff;
@@ -157,6 +216,8 @@ a{
 }
 
 .sidebar-profileinfo ul{
+    padding-left: 0;
+    margin-left: -5px;
     list-style: none;
 }
 
@@ -175,45 +236,71 @@ a{
 }
 
 .right-sidebar{
-    flex-basis: 25%;
+    flex-basis: 30%;
     align-self: flex-start;
     position: sticky;
     top: 73px;
 }
 
-.sidebar-trends{
-    background: #ffff;
-    padding: 10px 25px;
+/* Стили для панели подписок */
+.subscriptions-panel {
+    position: fixed;
+    right: 20px; /* Добавляем отступ справа */
+    top: 100px;
+    width: 300px; /* Увеличиваем ширину панели */
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    font-family: Arial, sans-serif;
+    z-index: 100;
 }
 
-.sidebar-trends h3{
+.subscriptions-panel h3 {
+    margin: 0 0 10px;
     font-size: 18px;
-    font-weight: 600;
     color: #333;
-    margin: 10px 0 30px;
+    font-weight: bold;
 }
 
-.sidebar-trends a{
-    display: block;
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 10px;
-    margin-bottom: -5px;
+.subscriptions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.sidebar-trends span{
-    font-size: 12px;
-    margin-top: 5px;
+.subscription-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.sidebar-trends .show_more{
-    color: #045be6;
+.subscription-item:last-child {
+    border-bottom: none;
+}
+
+.subscription-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.subscription-name {
+    font-size: 14px;
+    color: #333;
     font-weight: 500;
-    margin: 20px 0 10px;
 }
+
+/* Ховеры */
+.subscription-item:hover {
+    background-color: #e9f5ff;
+}
+
 
 .main{
-    flex-basis: 47%;  
+    flex-basis: 75%;  
 }
 
 .create-post{
@@ -367,6 +454,85 @@ a{
     margin-right: 8px;
 }
 
+.comments-section {
+    border-top: 1px solid #e0e0e0; /* Граница сверху для разделения */
+    padding-top: 10px; /* Отступ сверху */
+    margin-top: 10px; /* Отступ сверху */
+}
+
+.comments-section h3 {
+    margin: 0 0 10px; /* Отступы заголовка */
+    font-size: 18px; /* Размер шрифта заголовка */
+}
+
+.comments-list {
+    list-style: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+    margin: 0 0 10px; /* Отступы снизу */
+}
+
+.comment-item {
+    display: flex; 
+    align-items: flex-start; 
+    margin: 5px 0;
+}
+
+.comment-user-image {
+    width: 40px; /* Ширина изображения пользователя */
+    height: 40px; /* Высота изображения пользователя */
+    border-radius: 50%; /* Закругление углов для круглой формы */
+    margin-right: 10px; /* Отступ справа от изображения */
+}
+
+.comment-content {
+    flex: 1; /* Занять оставшееся пространство */
+}
+
+.comment-content strong {
+    display: block; /* Ники пользователей на новой строке */
+    margin-bottom: 2px; /* Уменьшенный отступ снизу от ника */
+    font-weight: bold; /* Жирный шрифт для ника */
+}
+
+.comment-content p {
+    margin: 0; /* Убираем отступы для текста комментария */
+    font-size: 14px; /* Размер шрифта для текста комментария */
+}
+
+.comment-input {
+    width: 100%; /* Ширина текстового поля */
+    padding: 10px; /* Отступы внутри текстового поля */
+    border: 1px solid #e0e0e0; /* Граница текстового поля */
+    border-radius: 5px; /* Закругление углов текстового поля */
+    resize: none; /* Убираем возможность изменения размера текстового поля */
+    margin-left: -8px; 
+}
+
+.comment-input:focus {
+    border-color: #1da1f2; /* Цвет границы при фокусе */
+    outline: none; /* Убираем обводку */
+}
+
+.add-comment {
+    display: flex; /* Используем flex для выравнивания элементов */
+    gap: 10px; /* Расстояние между полем ввода и кнопкой */
+    margin-top: 10px; /* Отступ сверху */
+}
+
+.submit-comment {
+    background-color: #1da1f2; /* Цвет кнопки отправки */
+    color: white; /* Цвет текста на кнопке */
+    border: none; /* Убираем границу */
+    padding: 10px 15px; /* Отступы кнопки */
+    border-radius: 5px; /* Закругление углов кнопки */
+    cursor: pointer; /* Указатель на кнопке */
+}
+
+.submit-comment:hover {
+    background-color: #0099cc; /* Цвет кнопки при наведении */
+}
+
+
 .profile-menu-wrap{
     position: absolute;
     top: 100%;
@@ -401,7 +567,7 @@ a{
 }
 
 .user-info h3{
-    font-weight: 500;
+    font-weight: 700;
     color: #fff;
 }
 
@@ -434,8 +600,10 @@ a{
 }
 
 .profile-menu-links img{
-    width: 35px;
-    margin-right: 15px;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .profile-main{
@@ -478,4 +646,91 @@ a{
 
 .profile-container p{
     margin-top: 5px;
+}
+
+.profile-header {
+    position: relative; /* For positioning the profile picture */
+    margin-bottom: 5px; /* Space below the profile header */
+}
+
+.profile-background {
+    background-color: #1da1f2; /* Background image for the profile */
+    background-size: cover; /* Cover the entire background area */
+    height: 100px; /* Increased height of the background area */
+    border-radius: 8px 8px 0 0; /* Rounded corners on top */
+}
+
+.profile-pic {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    margin-right: 20px;
+    margin-left: 10px;
+    margin-top: -50px; /* Pull up the profile picture to overlap the background */
+    position: absolute; /* Absolute positioning for the overlap effect */
+    left: 20px; /* Align to the left with some padding */
+    top: 100px; /* Position below the background */
+    border: 3px solid white; /* Optional: add a border around the profile picture */
+}
+
+.profile-info {
+    background-color: #fff;
+    padding: 70px 0 20px; /* Space above and below text */
+    border-radius: 0px 0px 8px 8px; /* Rounded corners on top */
+}
+
+.profile-info h2{
+    margin-top: -60px;
+    margin-left: 180px; /* Add margin to the left for text spacing */
+}
+
+
+.profile-info p{
+    margin: 3px;
+    margin-top: -20px;
+    margin-left: 180px; /* Add margin to the left for text spacing */
+}
+
+.post-stats{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 6px;
+}
+
+.followers div{
+    margin-top: 20px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.followers img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: -10px;
+}
+
+.following-users{
+    margin-left: 25px;
+}
+
+.stats-panel {
+    display: flex; /* Use Flexbox for layout */
+    justify-content: flex-start; /* Distribute space evenly between items */
+    margin-top: 10px; /* Space above the panel */
+    margin-left: 15px;
+}
+
+.stat-item {
+    text-align:center; /* Center-align text within each stat item */
+    margin: 0 10px; /* Set horizontal margin to 10px for spacing */
+}
+
+.stat-item span {
+    font-weight: 500; /* Make the text bold */
 }
