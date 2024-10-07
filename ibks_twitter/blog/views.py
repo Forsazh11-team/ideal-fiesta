@@ -8,17 +8,14 @@ from users.models import Follow
 from blog.models import Tweet
 
 
-def home(request):
-    return render(request, 'main_page.html', {})
-
-def user_account(request):
-    pass
 class Home_list_view(ListView):
     model = Tweet
     template_name = 'main_page.html'
+
     def get_queryset(self):
         user = self.request.user
         return Follow.objects.filter(user=user)
+
     def get_context_data(self, *, object_list=None, **kwargs):
         data = super().get_context_data(**kwargs)
         users = []
@@ -37,6 +34,30 @@ class Home_list_view(ListView):
         data['object_list'] = data['object_list'][:6]
         print(data['flag_posts'])
         return data
+
+
+class Profile_list_view(ListView):
+    model = Tweet
+    template_name = 'profile_page.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        return Follow.objects.filter(user=user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        data = super().get_context_data(**kwargs)
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        try:
+            tweets = Tweet.objects.filter(author=user).order_by('-date_posted')
+            print(tweets)
+            data['flag_posts'] = True
+            data['tweets'] = tweets
+        except:
+            print("No...")
+            data['flag_posts'] = False
+        data['user'] = user
+        return data
+
 
 def tweet_view(request):
     if request.method == 'POST':
