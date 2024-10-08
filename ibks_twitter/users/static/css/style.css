@@ -248,12 +248,12 @@ a{
     right: 20px; /* Добавляем отступ справа */
     top: 100px;
     width: 300px; /* Увеличиваем ширину панели */
-    background-color: #f7f7f7;
-    border-radius: 8px;
+    border-radius: 8px;    
+    background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 15px;
-    font-family: Arial, sans-serif;
     z-index: 100;
+    margin-top: -6px;
 }
 
 .subscriptions-panel h3 {
@@ -351,18 +351,22 @@ a{
     margin-left: 10px; /* Отступ между текстовым полем и кнопкой */
 }
 
-.create-post-links li {
-    list-style: none; /* Убираем маркеры списка */
+.create-post-links button {
     background-color: #1da1f2; /* Цвет фона кнопки */
     color: white; /* Цвет текста кнопки */
     padding: 10px 15px; /* Внутренние отступы кнопки */
     border-radius: 4px; /* Закругление углов кнопки */
-    cursor: pointer; /* Указатель при наведении */
     transition: background-color 0.3s; /* Плавный переход цвета фона */
+    border: none;
+    outline: none;
 }
 
-.create-post-links li:hover {
+.create-post-links button:hover {
     background-color: #0d8dd3; /* Цвет фона кнопки при наведении */
+}
+
+.create-post-links button:focus {
+    outline: none; /* Убираем обводку при фокусе */
 }
 
 .post{
@@ -370,6 +374,7 @@ a{
     border-radius: 10px; /* Закругление углов */
     padding: 20px 25px 5px;
     margin: 5px 0 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .post-author{
@@ -378,10 +383,11 @@ a{
 }
 
 .post-author img{
-    width: 45px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     margin-right: 10px;
-    margin-top: 5px;
+    margin-top: -5px;
 }
 
 .post-author h1{
@@ -397,7 +403,8 @@ a{
 }
 
 .post p{
-    font-size: 14px;
+    margin-top: 5px;
+    font-size: 16px;
     margin-bottom: 15px;
 }
 
@@ -549,10 +556,13 @@ a{
 
 .profile-menu{
     border-radius: 20px;
-    background-color: #1da1f2;
+    background-color: #ffffff;
+    border: 2px solid #1da1f2;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Добавляем тень */
     padding: 10px;
     margin: 10px;
 }
+
 
 .user-info{
     display: flex;
@@ -563,16 +573,17 @@ a{
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-right: 15px;
+    margin-right: 10px;
+    margin-left: 1px;
 }
 
 .user-info h3{
     font-weight: 700;
-    color: #fff;
+    color: #333;
 }
 
 .user-info a{
-    color: #fff;
+    color: #333;
     font-size: 15px;
 }
 
@@ -580,7 +591,7 @@ a{
     border: 0;
     height: 1px;
     width: 100%;
-    background: #fff;
+    background: #333;
     margin: 15px 0 10px;
 
 }
@@ -588,7 +599,7 @@ a{
 .profile-menu-links{
     display: flex;
     align-items: center;
-    color: #fff;
+    color: #333;
     margin: 5px 0;
     font-size: 15px;
 }
@@ -658,6 +669,7 @@ a{
     background-size: cover; /* Cover the entire background area */
     height: 100px; /* Increased height of the background area */
     border-radius: 8px 8px 0 0; /* Rounded corners on top */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile-pic {
@@ -665,7 +677,6 @@ a{
     height: 130px;
     border-radius: 50%;
     margin-right: 20px;
-    margin-left: 10px;
     margin-top: -50px; /* Pull up the profile picture to overlap the background */
     position: absolute; /* Absolute positioning for the overlap effect */
     left: 20px; /* Align to the left with some padding */
@@ -677,18 +688,19 @@ a{
     background-color: #fff;
     padding: 70px 0 20px; /* Space above and below text */
     border-radius: 0px 0px 8px 8px; /* Rounded corners on top */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile-info h2{
     margin-top: -60px;
-    margin-left: 180px; /* Add margin to the left for text spacing */
+    margin-left: 165px; /* Add margin to the left for text spacing */
 }
 
 
 .profile-info p{
     margin: 3px;
     margin-top: -20px;
-    margin-left: 180px; /* Add margin to the left for text spacing */
+    margin-left: 165px; /* Add margin to the left for text spacing */
 }
 
 .post-stats{

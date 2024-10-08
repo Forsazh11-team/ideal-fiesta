@@ -61,20 +61,20 @@
    </nav>
    <div class="container">
     <div class="main">
+        <form class="create-post-form" action="/home/tweet" method="POST">
         <div class="create-post">
-<!--            <form class="create-post-form" action="/home/tweet" method="POST">-->
-<!--                {% csrf_token %}-->
-<!--                <div class="create-post-input">-->
-<!--                    <img src="{{user.image}}">-->
-<!--                    <input type="text" name="content" placeholder="Say something to world!" oninput="autoResize(this)" required>-->
-<!--                </div>-->
-<!--                <div class="create-post-links">-->
-<!--                    <button type="submit">Tweet</button>-->
-<!--                </div>-->
-<!--            </form>-->
+                {% csrf_token %}
+                <div class="create-post-input">
+                   <img src="{{user.image}}">
+                   <textarea rows="1" placeholder="Say something to world!" oninput="autoResize(this)" required></textarea>
+                </div>
+              <div class="create-post-links">
+                    <button type="submit">Tweet</button>
+             </div>
         </div>
+        </form>
         {% if flag_posts %}
-         {% for tweet in tweets %}
+        {% for tweet in tweets %}
          <div class="post">
             <div class="post-author">
                 <img src=" {{ tweet.author.profile.image.url }}">
