@@ -370,12 +370,16 @@ a{
 }
 
 .post{
+    cursor: pointer;
+    max-width: 850px; /* Ограничьте максимальную ширину поста */
+    width: auto; /* Позволяет ширине автоматически подстраиваться */
     background: #fff;
     border-radius: 10px; /* Закругление углов */
     padding: 20px 25px 5px;
     margin: 5px 0 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 .post-author{
     display: flex;
@@ -406,6 +410,14 @@ a{
     margin-top: 5px;
     font-size: 16px;
     margin-bottom: 15px;
+}
+
+.post-content {
+    max-width: 100%; /* Чтобы адаптироваться к меньшим экранам */
+    padding: 2px; /* Внутренний отступ */
+    white-space: normal; /* Перенос текста по словам */
+    word-wrap: break-word; /* Перенос длинных слов на следующую строку */
+    overflow-wrap: break-word; /* Совместимость с различными браузерами */
 }
 
 .post-stats{
@@ -661,7 +673,7 @@ a{
 
 .profile-header {
     position: relative; /* For positioning the profile picture */
-    margin-bottom: 5px; /* Space below the profile header */
+    margin-bottom: 15px; /* Space below the profile header */
 }
 
 .profile-background {
@@ -745,4 +757,43 @@ a{
 
 .stat-item span {
     font-weight: 500; /* Make the text bold */
+}
+
+
+
+.modal {
+    display: none; /* Скрыть модальное окно по умолчанию */
+    position: fixed; /* Окно фиксируется относительно окна браузера */
+    z-index: 1000; /* Убедитесь, что модальное окно выше других элементов */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Добавляет прокрутку, если необходимо */
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный черный фон */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto; /* Центрирование */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ширина модального окна */
+    max-width: 600px; /* Максимальная ширина */
+    border-radius: 10px; /* Закругленные углы */
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

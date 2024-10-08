@@ -6,6 +6,7 @@ from django.template import context
 from django.views.generic import ListView
 from users.models import Follow
 from blog.models import Tweet
+from django.http import JsonResponse  
 
 
 class Home_list_view(ListView):
@@ -19,6 +20,7 @@ class Home_list_view(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         data = super().get_context_data(**kwargs)
         users = []
+        users.append(self.request.user)
         for i in data['object_list']:
             users.append(i.follow_user)
 
@@ -34,7 +36,6 @@ class Home_list_view(ListView):
         data['object_list'] = data['object_list'][:6]
         print(data['flag_posts'])
         return data
-
 
 class Profile_list_view(ListView):
     model = Tweet
@@ -62,8 +63,46 @@ class Profile_list_view(ListView):
 
 def tweet_view(request):
     if request.method == 'POST':
-        author = request.user
-        content = request.POST['content']
-        tweet = Tweet.objects.create(author=author, content=content)
-        tweet.save()
-        return redirect('/home')
+        try:
+            author = request.user
+            content = request.POST.get('content')  # Используем get для безопасного доступа
+            
+            # Проверяем, что содержимое не пустое
+            if content:
+                tweet = Tweet.objects.create(author=author, content=content)
+                tweet.save()
+
+                # Формируем данные для ответа
+                response_data = {
+                    'id': tweet.id,
+                    'author_username': tweet.author.username,
+                    'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),  # Форматируем дату
+                    'content': tweet.content
+                }
+
+                # Проверяем, является ли запрос AJAX
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse(response_data)  # Возвращаем JSON с данными нового твита
+                else:
+                    return redirect('/home')  # Для обычного запроса перенаправляем
+            else:
+                # Возвращаем ошибку, если контент пустой
+                return JsonResponse({'error': 'Content cannot be empty'}, status=400)
+
+        except Exception as e:
+            return JsonResponse({'error': 'An internal error occurred.'}, status=500)
+
+    return redirect('/home')  # Укажите свой шаблон
+
+
+def tweet_detail(request, tweet_id):
+    print("sosal?")
+    tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
+        data = {
+            'author': tweet.author.username,
+            'content': tweet.content,
+            'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
+            # Добавьте другие необходимые поля
+        }
+        return JsonResponse(data)

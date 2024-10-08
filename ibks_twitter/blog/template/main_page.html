@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {% load static %}
     <title>Home page</title>
     <link rel="stylesheet"  href="{% static 'css/style.css' %}">
@@ -61,29 +62,33 @@
    </nav>
    <div class="container">
     <div class="main">
-        <form class="create-post-form" action="/home/tweet" method="POST">
+        <form class="create-post-form" id="post_form" action="/home/tweet" method="POST">
         <div class="create-post">
                 {% csrf_token %}
+                {{ form.as_p }}
                 <div class="create-post-input">
                    <img src="{{user.image}}">
-                   <textarea rows="1" placeholder="Say something to world!" oninput="autoResize(this)" required></textarea>
+                   <textarea id="tweet_content" rows="1" placeholder="Say something to world!" oninput="autoResize(this)" required></textarea>
                 </div>
               <div class="create-post-links">
-                    <button type="submit">Tweet</button>
+                    <button type="submit" id="submit_button">Tweet</button>
              </div>
         </div>
         </form>
+        <a href ="#" onclick="handleClick(event)"><div id="new_tweets"></div></a>
         {% if flag_posts %}
         {% for tweet in tweets %}
-         <div class="post">
+        <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
             <div class="post-author">
                 <img src=" {{ tweet.author.profile.image.url }}">
                 <div>
-                    <h1>{{tweet.author.username}}</h1>
+                    <a href="/{{tweet.author.username}}"><h1>{{tweet.author.username}}</h1></a>
                     <small>{{tweet.date_posted}}</small>
                 </div>
             </div>
-            {{tweet.content}}
+            <div class="post-content">
+                {{tweet.content}}
+            </div>
             <div class="post-stats">
                 <div>
                     <span>{{tweet.likes}} likes</span>
@@ -94,12 +99,8 @@
                     <img src="{% static 'img/like.png' %}" alt="">
                     <span>Like</span>
                 </div>
-                <div class="post-activity-link">
-                    <img src="{% static 'img/share.png' %}" alt="">
-                    <span>Share</span>
-                </div>
             </div>
-         </div>
+         </div></a>
          {% endfor %}
          {% endif %}
     </div>
@@ -117,6 +118,15 @@
                     {% endfor %}
                 </ul>
             </div>
+        </div>
+    </div>
+    <!-- Модальное окно -->
+    <div id="tweetModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-author"></h2>
+            <p id="modal-content"></p>
+            <small id="modal-date"></small>
         </div>
     </div>
 <script>
@@ -168,6 +178,110 @@
         if (!notificationPopup.contains(event.target) && notificationPopup.classList.contains("show")) {
             notificationPopup.classList.remove("show");
         }
+    });
+
+    $(document).ready(function () {
+        $('#submit_button').click(function (e) {
+            e.preventDefault(); // Отменяем стандартное поведение формы
+
+            var tweetContent = $('#tweet_content').val();  // Получаем содержимое твита
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // Получаем CSRF-токен
+
+            if (tweetContent.trim() === "") {
+                return;
+            }
+
+            // Отправляем данные через AJAX
+            $.ajax({
+                url: $('#post_form').attr('action'),  // URL формы
+                type: 'POST',
+                data: {
+                    content: tweetContent,
+                    csrfmiddlewaretoken: csrfToken
+                },
+                success: function (response) {
+                    // Добавляем новый твит в начало списка
+                    var newTweetHtml = `
+                        <div class="post" data-post-id="${response.id}">
+                            <div class="post-author">
+                                <img src="${response.author_image}" alt="">
+                                <div>
+                                    <a href="/${response.author_username}"><h1>${response.author_username}</h1></a>
+                                    <small>${response.date_posted}</small>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                ${response.content}
+                            </div>
+                            <div class="post-stats">
+                                <div>
+                                    <span>0 likes</span>
+                                </div>
+                            </div>
+                            <div class="post-activity">
+                                <div class="post-activity-link">
+                                    <img src="{% static 'img/like.png' %}" alt="">
+                                    <span>Like</span>
+                                </div>
+                                <div class="post-activity-link">
+                                    <img src="{% static 'img/share.png' %}" alt="">
+                                    <span>Share</span>
+                                </div>
+                            </div>
+                        </div>`;
+
+                    // Добавляем новый твит в начало списка
+                    $('#new_tweets').prepend(newTweetHtml);
+
+                    // Очищаем поле ввода
+                    $('#tweet_content').val('');
+                },
+                error: function (xhr, status, error) {
+                    alert("Error: Unable to post tweet. Please try again.");
+                }
+            });
+        });
+    });
+});
+
+
+    function openModal(tweetId) {
+        $.ajax({
+        url: `/tweet/${tweetId}/`,
+        type: 'GET',
+        success: function(data) {
+            // Заполнение модального окна данными твита
+            document.getElementById('modal-author').textContent = data.author;
+            document.getElementById('modal-content').textContent = data.content;
+            document.getElementById('modal-date').textContent = data.date_posted;
+
+            // Отображение модального окна
+            document.getElementById('tweetModal').style.display = 'block';
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    });
+    }
+    function closeModal() {
+        const modal = document.getElementById("tweetModal");
+        modal.style.display = "none";  // Скрываем модальное окно
+    }
+
+    // Закрытие модального окна при клике вне его содержимого
+    window.onclick = function(event) {
+        const modal = document.getElementById("tweetModal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+    
+    $(document).ready(function() {
+    // Устанавливаем обработчик события клика на все твиты
+    $('#new_tweets').on('click', '.post', function() {
+        var tweetId = $(this).attr('data-post-id');
+        openModal(tweetId)
     });
 });
 </script>

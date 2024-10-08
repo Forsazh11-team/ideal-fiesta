@@ -1,83 +1,34 @@
-* {
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+body{
+    margin-top:20px;
+    background:#F0F8FF;
 }
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #1da1f2;;
-    margin: 0;
-    padding: 20px;
+.card {
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 15px 1px rgba(52,40,104,.08);
 }
-
-.container {
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.profile-edit-form {
+.card {
+    position: relative;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-direction: column;
     flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #e5e9f2;
+    border-radius: .2rem;
 }
-
-.form-group {
-    margin-bottom: 15px;
+.card-header:first-child {
+    border-radius: calc(.2rem - 1px) calc(.2rem - 1px) 0 0;
 }
-
-label {
-    margin-bottom: 5px;
-    font-weight: bold;
+.card-header {
+    border-bottom-width: 1px;
 }
-
-input[type="text"], input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.profile-pic-container {
-    display: flex;
-    align-items: center;
-}
-
-.profile-pic {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-right: 20px;
-    object-fit: cover; /* Maintain aspect ratio */
-}
-
-.save-button {
-    padding: 10px 20px;
-    background-color: #1da1f2;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.save-button:hover {
-    background-color: #0096db; /* Darker shade on hover */
-}
-
-.back-button {
-    position: absolute; /* Position it in the corner */
-    top: 20px; /* Adjust top position */
-    left: 20px; /* Adjust left position */
-    text-decoration: none; /* Remove underline */
-}
-
-.back-icon {
-    width: 24px; /* Adjust the icon size */
-    height: 24px; /* Adjust the icon size */
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    color: inherit;
+    background-color: #fff;
+    border-bottom: 1px solid #e5e9f2;
 }

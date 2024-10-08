@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {% load static %}
     <title>Profile page</title>
     <link rel="stylesheet"  href="{% static 'css/style.css' %}">
@@ -58,50 +57,24 @@
             </a>
         </div>
     </div>
+
    </nav>
    <div class="container">
     <div class="main">
-        <div class="profile-header">
-            <div class="profile-background"></div>
-            <img src="{{user.profile.image.url}}" alt="Profile Picture" class="profile-pic">
-            <div class="profile-info">
-                <h2>{{user.username}}</h2>
-                {% if user.profile.location != "" %}
-                    <p><a href="#">{{user.profile.location}}</a></p>
-                {% else %}
-                    <p><a href="#">No location</a></p>
-                {% endif %}
-                <div class="followers">
-                </div>
-                <div class="stats-panel">
-                    <div class="stat-item">
-                        <span>Followers: <strong>{{user.profile.followers}}</strong></span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Following: <strong>{{user.profile.following}}</strong></span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Posts: <strong>{{tweets.count}}</strong></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% if flag_posts %}
-         {% for tweet in tweets %}
-            <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }})">
+         <a href="/home/tweet"><div class="post">
             <div class="post-author">
                 <img src="{{ tweet.author.profile.image.url }}">
                 <div>
-                   <h1>{{tweet.author.username}}</h1>
-                    <small>{{tweet.date_posted}}</small>
+                   <h1>Eblan</h1>
+                    <small>date</small>
                 </div>
             </div>
             <div class="post-content">
-                {{tweet.content}}
+                Sosal
             </div>
             <div class="post-stats">
                 <div>
-                    <span>{{tweet.likes}} likes</span>
+                    <span>0 likes</span>
                 </div>
             </div>
             <div class="post-activity">
@@ -110,35 +83,13 @@
                     <span>Like</span>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-        <div class="right-sidebar">
-            <div class="subscriptions-panel">
-                <h3>Your Followings</h3>
-                <ul class="subscriptions-list">
-                    {% for user in object_list %}
-                    <li class="subscription-item">
-                       <button onclick="location.href='/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
-                        <img style="width: 20px; height: 20px;" src="{{ user.follow_user.profile.image.url }}">
-                        <span>{{ user.follow_user.username }}</span>
-                        </button>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+        </div></a>
+        <div class="comment-section">
+            
         </div>
     </div>
-    <!-- Модальное окно -->
-    <div id="tweetModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modal-author"></h2>
-            <p id="modal-content"></p>
-            <small id="modal-date"></small>
-        </div>
-    </div>
+</div>
+
 <script>
     let profileMenu = document.getElementById("profileMenu");
     function toggleMenu(){
@@ -188,38 +139,7 @@
             notificationPopup.classList.remove("show");
         }
     });
-    });
-
-    function openModal(tweetId) {
-        $.ajax({
-        url: `/tweet/${tweetId}/`,
-        type: 'GET',
-        success: function(data) {
-            // Заполнение модального окна данными твита
-            document.getElementById('modal-author').textContent = data.author;
-            document.getElementById('modal-content').textContent = data.content;
-            document.getElementById('modal-date').textContent = data.date_posted;
-
-            // Отображение модального окна
-            document.getElementById('tweetModal').style.display = 'block';
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    });
-    }
-    function closeModal() {
-        const modal = document.getElementById("tweetModal");
-        modal.style.display = "none";  // Скрываем модальное окно
-    }
-
-    // Закрытие модального окна при клике вне его содержимого
-    window.onclick = function(event) {
-        const modal = document.getElementById("tweetModal");
-        if (event.target === modal) {
-            closeModal();
-        }
-    }
+});
 
 </script>
 </body>
