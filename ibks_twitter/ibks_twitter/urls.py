@@ -27,7 +27,7 @@ urlpatterns = [
     path("", include('users.urls')),
     path("home/", Home_list_view.as_view()),
     path("home/tweet", blog_views.tweet_view),
-    #path("<username>", Profile_list_view.as_view()),
+    path("<username>", Profile_list_view.as_view()),
     path('tweet/<int:tweet_id>/', tweet_detail, name='tweet_detail'),  # Для AJAX запроса
     path('settings/', Settings_view.as_view()), 
 

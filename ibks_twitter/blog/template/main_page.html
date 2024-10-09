@@ -97,7 +97,7 @@
             </div>
             <div class="comment-section" onclick="childClick(event)">
                  <!-- Список комментариев -->
-                <div id="comment-list">
+                <div id="comment-list-{{tweet.id}}">
                     <hr class="comment-line">
                     <div class="comment-item">
                         <img src="{% static 'img/start.jpg' %}">
@@ -111,8 +111,8 @@
               <!-- Секция для добавления нового комментария -->
                 <div class="comment-item" onclick="childClick(event)">
                     <img src="{% static 'img/start.jpg' %}">
-                    <textarea rows=1 class="comment-input" id="comment_content" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
-                    <button class="submit-comment" onclick="addComment()">Отправить</button>
+                    <textarea rows=1 class="comment-input" id="comment-{{tweet.id}}" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
+                    <button class="submit-comment" onclick="addComment({{tweet.id}})">Отправить</button>
                 </div>
             </div>
         </div>
@@ -235,15 +235,13 @@
                             </div>
                             <div class="comment-section" onclick="childClick(event)">
                             <!-- Список комментариев -->
-                            <div id="comment-list">
-                            <hr class="comment-line">
-                            <div class="comment-item"></div>
+                            <div id="comment-list-${response.id}">
                             </div>
-                            </div>
+                            <!-- Секция для добавления нового комментария -->
                             <div class="comment-item" onclick="childClick(event)">
                             <img src="{% static 'img/start.jpg' %}">
-                            <textarea rows=1 class="comment-input" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
-                            <button class="submit-comment" onclick="addComment()">Отправить</button>
+                            <textarea rows=1 class="comment-input" id="comment-${response.id}" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
+                            <button class="submit-comment" onclick="addComment(${response.id})">Отправить</button>
                             </div>
                             </div>`;
 
@@ -303,8 +301,8 @@
 });
 
 
-    function addComment() {
-        const commentInput = $('#comment_content').val();;
+    function addComment(tweetId) {
+        const commentInput = document.getElementById(`comment-${tweetId}`).value;
         if (commentInput.trim() === "") {
             alert("Комментарий не может быть пустым");
             return;
@@ -320,8 +318,8 @@
                             <span class="comment-date">${time}</span>
                         </div>
                     </div>`
-        $('#comment-list').append(newComment);
-        $('#comment_content').val('');
+        $(`#comment-list-${tweetId}`).append(newComment);
+        $(`#comment-${tweetId}`).val('');
     }
 
     function childClick(event) {
