@@ -19,23 +19,6 @@
         </div>
     </div>
     <div class="navbar-center">
-        <ul>
-            <li class="notification-icon">
-                <a href="#" id="notification-button">
-                    <img src="{% static 'img/bell.png' %}">
-                    <span>Notifications</span>
-                </a>
-                <!-- Всплывающее окно с уведомлениями -->
-                <div id="notification-popup" class="notification-popup">
-                    <h4>Notifications</h4>
-                    <ul>
-                        <li><a href="#">New friend request</a></li>
-                        <li><a href="#">Message from John</a></li>
-                        <li><a href="#">Your post got a like!</a></li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
     </div>
     <div class="navbar-right">
         <img src="{{auth_user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
@@ -48,7 +31,7 @@
                     <h3><a href="/{{auth_user.username}}" class="profile-menu-links">{{auth_user.username}}</a></h3>
                 </div>
             </div>
-            <a href="#" class="profile-menu-links">
+            <a href="/settings" class="profile-menu-links">
                 <img src="{% static 'img/settings.png' %}" alt="">
                 <p>Settings</p>
             </a>

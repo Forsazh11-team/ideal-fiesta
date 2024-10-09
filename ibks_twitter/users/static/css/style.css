@@ -418,26 +418,7 @@ a{
     white-space: normal; /* Перенос текста по словам */
     word-wrap: break-word; /* Перенос длинных слов на следующую строку */
     overflow-wrap: break-word; /* Совместимость с различными браузерами */
-}
-
-.post-stats{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 6px;
-}
-
-.post-stats div{
-    display: flex;
-    align-items: center;
-}
-
-.post-stats img{
-    width: 20px;
-    margin-right: -5px;
+    margin-top: 5px;
 }
 
 .liked-users{
@@ -493,7 +474,7 @@ a{
 .comment-item {
     display: flex; 
     align-items: flex-start; 
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
 .comment-user-image {
@@ -518,18 +499,53 @@ a{
     font-size: 14px; /* Размер шрифта для текста комментария */
 }
 
-.comment-input {
-    width: 100%; /* Ширина текстового поля */
-    padding: 10px; /* Отступы внутри текстового поля */
-    border: 1px solid #e0e0e0; /* Граница текстового поля */
-    border-radius: 5px; /* Закругление углов текстового поля */
-    resize: none; /* Убираем возможность изменения размера текстового поля */
-    margin-left: -8px; 
+.comment-item {
+    display: flex; /* Используем flexbox для изображения и текстового поля */
+    align-items: center; /* Вертикальное выравнивание */
+    flex-grow: 1; /* Позволяем текстовому полю занимать доступное пространство */
+
 }
 
-.comment-input:focus {
-    border-color: #1da1f2; /* Цвет границы при фокусе */
-    outline: none; /* Убираем обводку */
+/* Стиль линии */
+.comment-line {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+.comment-item textarea::-webkit-scrollbar {
+    width: 0px;
+}
+
+.comment-item textarea {
+    width: 100%; /* Ширина текстового поля */
+    padding: 10px; /* Внутренние отступы */
+    border: 1px solid #d1d1d1; /* Рамка текстового поля */
+    border-radius: 4px; /* Закругление углов текстового поля */
+    resize: none; /* Запрет изменения размера текстового поля */
+    transition: border-color 0.3s; /* Плавный переход цвета рамки */
+}
+
+.comment-item textarea:focus {
+    border-color: #1da1f2; /* Цвет рамки при фокусе */
+    outline: none; /* Убираем стандартное выделение */
+}
+
+.comment-item img{
+    width: 35px;
+    border-radius: 50%;
+    margin-right: 10px; 
+}
+
+.comment-date {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #888; /* Приглушенный цвет для даты */
+}
+
+::placeholder{
+    font-weight: 500;
 }
 
 .add-comment {
@@ -538,18 +554,27 @@ a{
     margin-top: 10px; /* Отступ сверху */
 }
 
-.submit-comment {
-    background-color: #1da1f2; /* Цвет кнопки отправки */
-    color: white; /* Цвет текста на кнопке */
-    border: none; /* Убираем границу */
-    padding: 10px 15px; /* Отступы кнопки */
-    border-radius: 5px; /* Закругление углов кнопки */
-    cursor: pointer; /* Указатель на кнопке */
+.comment-item button {
+    background-color: #1da1f2; /* Цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    padding: 10px 15px; /* Внутренние отступы кнопки */
+    border-radius: 4px; /* Закругление углов кнопки */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+    border: none;
+    outline: none;
+    margin-left: 10px; /* Отступ между текстовым полем и кнопкой */
+
 }
 
-.submit-comment:hover {
-    background-color: #0099cc; /* Цвет кнопки при наведении */
+.comment-item button:hover {
+    background-color: #0d8dd3; /* Цвет фона кнопки при наведении */
 }
+
+.comment-item button:focus {
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+
 
 
 .profile-menu-wrap{
@@ -715,15 +740,6 @@ a{
     margin-left: 165px; /* Add margin to the left for text spacing */
 }
 
-.post-stats{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 6px;
-}
 
 .followers div{
     margin-top: 20px;
@@ -797,3 +813,7 @@ a{
     text-decoration: none;
     cursor: pointer;
 }
+
+
+
+

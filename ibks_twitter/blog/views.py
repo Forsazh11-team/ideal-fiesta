@@ -9,6 +9,17 @@ from blog.models import Tweet
 from django.http import JsonResponse  
 
 
+
+class Settings_view(ListView):
+    template_name = 'settings_page.html'
+    def get_queryset(self):
+        user = self.request.user
+        return Follow.objects.filter(user=user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        data = super().get_context_data(**kwargs)
+        return data
+
 class Home_list_view(ListView):
     model = Tweet
     template_name = 'main_page.html'
@@ -96,13 +107,11 @@ def tweet_view(request):
 
 
 def tweet_detail(request, tweet_id):
-    print("sosal?")
     tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
         data = {
             'author': tweet.author.username,
             'content': tweet.content,
             'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
-            # Добавьте другие необходимые поля
         }
         return JsonResponse(data)

@@ -48,7 +48,7 @@
                     <h3><a href="/{{user.username}}" class="profile-menu-links">{{user.username}}</a></h3>
                 </div>
             </div>
-            <a href="#" class="profile-menu-links">
+            <a href="/settings" class="profile-menu-links">
                 <img src="{% static 'img/settings.png' %}" alt="">
                 <p>Settings</p>
             </a>
@@ -89,21 +89,35 @@
             <div class="post-content">
                 {{tweet.content}}
             </div>
-            <div class="post-stats">
-                <div>
-                    <span>{{tweet.likes}} likes</span>
-                </div>
-            </div>
             <div class="post-activity">
                 <div class="post-activity-link">
                     <img src="{% static 'img/like.png' %}" alt="">
                     <span>Like</span>
                 </div>
             </div>
-         </div></a>
+            <div class="comment-section" onclick="childClick(event)">
+                 <!-- Список комментариев -->
+                <div id="comment-list">
+                    <hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="{% static 'img/start.jpg' %}">
+                        <div class="comment-content">
+                            <strong>user</strong>
+                            <p>comment</p>
+                            <span class="comment-date">09 октября 2024</span>
+                        </div>
+                    </div>
+                </div>
+              <!-- Секция для добавления нового комментария -->
+                <div class="comment-item" onclick="childClick(event)">
+                    <img src="{% static 'img/start.jpg' %}">
+                    <textarea rows=1 class="comment-input" id="comment_content" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
+                    <button class="submit-comment" onclick="addComment()">Отправить</button>
+                </div>
+            </div>
+        </div>
          {% endfor %}
          {% endif %}
-    </div>
         <div class="right-sidebar">
             <div class="subscriptions-panel">
                 <h3>Your Followings</h3>
@@ -213,22 +227,25 @@
                             <div class="post-content">
                                 ${response.content}
                             </div>
-                            <div class="post-stats">
-                                <div>
-                                    <span>0 likes</span>
-                                </div>
-                            </div>
                             <div class="post-activity">
-                                <div class="post-activity-link">
-                                    <img src="{% static 'img/like.png' %}" alt="">
-                                    <span>Like</span>
-                                </div>
-                                <div class="post-activity-link">
-                                    <img src="{% static 'img/share.png' %}" alt="">
-                                    <span>Share</span>
-                                </div>
+                            <div class="post-activity-link">
+                            <img src="{% static 'img/like.png' %}" alt="">
+                            <span>Like</span>
                             </div>
-                        </div>`;
+                            </div>
+                            <div class="comment-section" onclick="childClick(event)">
+                            <!-- Список комментариев -->
+                            <div id="comment-list">
+                            <hr class="comment-line">
+                            <div class="comment-item"></div>
+                            </div>
+                            </div>
+                            <div class="comment-item" onclick="childClick(event)">
+                            <img src="{% static 'img/start.jpg' %}">
+                            <textarea rows=1 class="comment-input" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
+                            <button class="submit-comment" onclick="addComment()">Отправить</button>
+                            </div>
+                            </div>`;
 
                     // Добавляем новый твит в начало списка
                     $('#new_tweets').prepend(newTweetHtml);
@@ -284,5 +301,31 @@
         openModal(tweetId)
     });
 });
+
+
+    function addComment() {
+        const commentInput = $('#comment_content').val();;
+        if (commentInput.trim() === "") {
+            alert("Комментарий не может быть пустым");
+            return;
+        }
+        const now = new Date();
+        const time = now.toLocaleString();
+        var newComment = `<hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="{% static 'img/start.jpg' %}">
+                        <div class="comment-content">
+                            <strong>user</strong>
+                            <p>${commentInput.trim()}</p>
+                            <span class="comment-date">${time}</span>
+                        </div>
+                    </div>`
+        $('#comment-list').append(newComment);
+        $('#comment_content').val('');
+    }
+
+    function childClick(event) {
+        event.stopPropagation(); // Останавливает всплытие события
+    }
 </script>
 </body>

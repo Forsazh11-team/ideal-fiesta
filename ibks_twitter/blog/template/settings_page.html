@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/edit.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>Настройки пользователя</title>
+</head>
+    <div class="settings-container">
+        <div class="sidebar">
+            <h2>Настройки</h2>
+            <ul>
+                <li><a href="#personal-info">Личные данные</a></li>
+                <li><a href="#security">Безопасность</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <h2 id="personal-info">Личные данные</h2>
+            <form id="profile-settings">
+                <label for="profile-image">Фото профиля</label>
+                <input type="file" id="profile-image" name="profile-image" accept="image/*" onchange="previewImage(event)">
+                <div class="image-preview">
+                    <img id="preview" src="#" alt="Предварительный просмотр" />
+                </div>
+
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" name="username" placeholder="Введите имя пользователя" required>
+
+                <label for="email">Электронная почта</label>
+                <input type="email" id="email" name="email" placeholder="Введите вашу почту" required>
+
+                <button type="submit">Сохранить изменения</button>
+            </form>
+
+            <h2 id="security">Безопасность</h2>
+            <form id="password-settings">
+                <label for="current-password">Текущий пароль</label>
+                <input type="password" id="current-password" name="current-password" placeholder="Введите текущий пароль" required>
+
+                <label for="new-password">Новый пароль</label>
+                <input type="password" id="new-password" name="new-password" placeholder="Введите новый пароль" required>
+
+                <label for="confirm-password">Подтвердите новый пароль</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Подтвердите новый пароль" required>
+
+                <button type="submit">Изменить пароль</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '#'; // Установите изображение по умолчанию, если файл не выбран
+            }
+        }
+    </script>
+</body>
+</html>
+
+
