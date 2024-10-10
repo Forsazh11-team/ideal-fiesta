@@ -1,16 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.db.models import Count
-from django.shortcuts import render, get_object_or_404, redirect
-from django.template import context
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from users.models import Follow
-from blog.models import Tweet
-from django.http import JsonResponse  
+from blog.models import Tweet, Like, Hashtag
+from django.http import JsonResponse, request
 import json
-
-from blog.models import Like
 
 
 class Settings_view(ListView):
@@ -22,6 +17,7 @@ class Settings_view(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         data = super().get_context_data(**kwargs)
         return data
+
 
 class Home_list_view(ListView):
     model = Tweet
@@ -49,6 +45,7 @@ class Home_list_view(ListView):
         data['user'] = self.request.user
         data['object_list'] = data['object_list'][:6]
         return data
+
 
 class Profile_list_view(ListView):
     model = Tweet
@@ -83,7 +80,6 @@ def tweet_view(request):
         try:
             author = request.user
             content = request.POST.get('content')  # Используем get для безопасного доступа
-            print(content)
             if content:
                 tweet = Tweet.objects.create(author=author, content=content)
                 tweet.save()
@@ -140,3 +136,34 @@ def like_tweet(request, tweet_id):
             tweet.likes -= 1
             tweet.save()
         return JsonResponse({'liked': False})
+
+
+class Search_view(ListView):
+    model = Tweet
+    template_name = 'search_result_page.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        return Follow.objects.filter(user=user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        data = super().get_context_data(**kwargs)
+        users = []
+        users.append(self.request.user)
+        for i in data['object_list']:
+            users.append(i.follow_user)
+        try:
+            query = self.request.GET.get('tag')
+            hashtag = Hashtag.objects.get(text=query)
+            print(hashtag)
+            tweets = hashtag.tweets.all().order_by('-date_posted')
+            print(tweets)
+            data['flag_posts'] = True
+            data['tweets'] = tweets
+            liked_tweet_ids = Like.objects.filter(user=self.request.user).values_list('tweet_id', flat=True)
+            data['liked_tweet_ids'] = list(liked_tweet_ids)
+        except:
+            data['flag_posts'] = False
+        data['user'] = self.request.user
+        data['object_list'] = data['object_list'][:6]
+        return data
