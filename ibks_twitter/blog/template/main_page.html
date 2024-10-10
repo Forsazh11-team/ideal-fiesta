@@ -15,13 +15,13 @@
     <div class="navbar-left">
         {% load static %}
         <a href="/home" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <form action="{% url 'search_by_hashtag' %}" method="get">
         <div class="searchbox">
 <!--            <img src="{% static 'img/search.png' %}">-->
-            <form action="{% url 'search_by_hashtag' %}" method="get">
             <input type="text" name="tag" placeholder="Enter hashtag">
-            <button type="submit">Search</button>
-</form>
+            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
         </div>
+        </form>
     </div>
     <div class="navbar-center">
     </div>
@@ -46,20 +46,23 @@
             </a>
         </div>
     </div>
-
    </nav>
    <div class="container">
     <div class="main">
-        <form class="create-post-form" id="post_form" action="/tweet/" method="POST">
-            {% csrf_token %}
+        <form class="create-post-form" id="post_form" action="/home/tweet" method="POST">
         <div class="create-post">
-            {{form.as_p}}
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="create-post-input">
+                   <img src="{{user.image}}">
+                   <textarea id="tweet_content" rows="1" placeholder="Поделитесь чем-нибудь!" oninput="autoResize(this)" required></textarea>
+                </div>
               <div class="create-post-links">
                     <button type="submit" id="submit_button">Поделиться</button>
              </div>
         </div>
         </form>
-        <a href ="/tweet" onclick="handleClick(event)"><div id="new_tweets"></div></a>
+        <a href ="#" onclick="handleClick(event)"><div id="new_tweets"></div></a>
         {% if flag_posts %}
         {% for tweet in tweets %}
         <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
@@ -131,6 +134,14 @@
             <h2 id="modal-author"></h2>
             <p id="modal-content"></p>
             <small id="modal-date"></small>
+            <div class="post-activity">
+                <div class="post-activity-link">
+                    <button id="likeBtn-{{tweet.id}}" class="like-btn" data-liked="false" onclick=" likeClick(event, {{tweet.id}})">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <span>{{tweet.likes}}</span>
+                </div>
+            </div>
         </div>
     </div>
 <script>
@@ -162,7 +173,7 @@
         textarea.style.height = textarea.scrollHeight + 'px'; // Устанавливаем новую высоту
     }
 
-    $(document).ready(function () {
+     $(document).ready(function () {
         $('#submit_button').click(function (e) {
             e.preventDefault(); // Отменяем стандартное поведение формы
 
@@ -227,8 +238,6 @@
             });
         });
     });
-});
-
 
     function openModal(tweetId) {
         $.ajax({

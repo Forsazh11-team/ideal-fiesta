@@ -15,10 +15,12 @@
     <div class="navbar-left">
         {% load static %}
         <a href="/home" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <form action="{% url 'search_by_hashtag' %}" method="get">
         <div class="searchbox">
-            <img src="{% static 'img/search.png' %}">
-            <input type="text" placeholder="Search">
+            <input type="text" name="tag" placeholder="Enter hashtag">
+            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
         </div>
+        </form>
     </div>
     <div class="navbar-center">
     </div>
@@ -175,29 +177,6 @@
         textarea.style.height = 'auto'; // Сбрасываем высоту
         textarea.style.height = textarea.scrollHeight + 'px'; // Устанавливаем новую высоту
     }
-    document.addEventListener("DOMContentLoaded", function() {
-    const notificationButton = document.getElementById("notification-button");
-    const notificationPopup = document.getElementById("notification-popup");
-
-    // Функция для переключения видимости окна
-    function toggleNotification() {
-        notificationPopup.classList.toggle("show");
-    }
-
-    // Открываем/закрываем уведомления при клике на иконку
-    notificationButton.addEventListener("click", function(event) {
-        event.stopPropagation(); // Останавливаем всплытие события, чтобы клик по кнопке не закрывал окно
-        toggleNotification();
-    });
-
-    // Закрываем уведомления при клике в любом другом месте страницы
-    document.addEventListener("click", function(event) {
-        // Проверяем, находится ли клик вне области окна с уведомлениями
-        if (!notificationPopup.contains(event.target) && notificationPopup.classList.contains("show")) {
-            notificationPopup.classList.remove("show");
-        }
-    });
-    });
 
     function openModal(tweetId) {
         $.ajax({
