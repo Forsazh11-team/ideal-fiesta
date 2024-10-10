@@ -50,20 +50,16 @@
    </nav>
    <div class="container">
     <div class="main">
-        <form class="create-post-form" id="post_form" action="/home/tweet" method="POST">
+        <form class="create-post-form" id="post_form" action="/tweet/" method="POST">
+            {% csrf_token %}
         <div class="create-post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="create-post-input">
-                   <img src="{{user.image}}">
-                   <textarea id="tweet_content" rows="1" placeholder="Поделитесь чем-нибудь!" oninput="autoResize(this)" required></textarea>
-                </div>
+            {{form.as_p}}
               <div class="create-post-links">
                     <button type="submit" id="submit_button">Поделиться</button>
              </div>
         </div>
         </form>
-        <a href ="#" onclick="handleClick(event)"><div id="new_tweets"></div></a>
+        <a href ="/tweet" onclick="handleClick(event)"><div id="new_tweets"></div></a>
         {% if flag_posts %}
         {% for tweet in tweets %}
         <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
@@ -165,34 +161,12 @@
         textarea.style.height = 'auto'; // Сбрасываем высоту
         textarea.style.height = textarea.scrollHeight + 'px'; // Устанавливаем новую высоту
     }
-    document.addEventListener("DOMContentLoaded", function() {
-    const notificationButton = document.getElementById("notification-button");
-    const notificationPopup = document.getElementById("notification-popup");
-
-    // Функция для переключения видимости окна
-    function toggleNotification() {
-        notificationPopup.classList.toggle("show");
-    }
-
-    // Открываем/закрываем уведомления при клике на иконку
-    notificationButton.addEventListener("click", function(event) {
-        event.stopPropagation(); // Останавливаем всплытие события, чтобы клик по кнопке не закрывал окно
-        toggleNotification();
-    });
-
-    // Закрываем уведомления при клике в любом другом месте страницы
-    document.addEventListener("click", function(event) {
-        // Проверяем, находится ли клик вне области окна с уведомлениями
-        if (!notificationPopup.contains(event.target) && notificationPopup.classList.contains("show")) {
-            notificationPopup.classList.remove("show");
-        }
-    });
 
     $(document).ready(function () {
         $('#submit_button').click(function (e) {
             e.preventDefault(); // Отменяем стандартное поведение формы
 
-            var tweetContent = $('tweet_content').val();  // Получаем содержимое твита
+            var tweetContent = $('#tweet_content').val();  // Получаем содержимое твита
             var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // Получаем CSRF-токен
 
             if (tweetContent.trim() === "") {

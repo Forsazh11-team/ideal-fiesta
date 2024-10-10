@@ -6,6 +6,7 @@ from users.models import Follow
 from blog.models import Tweet, Like, Hashtag
 from django.http import JsonResponse, request
 import json
+from blog.forms import TweetForm
 
 
 class Settings_view(ListView):
@@ -22,7 +23,6 @@ class Settings_view(ListView):
 class Home_list_view(ListView):
     model = Tweet
     template_name = 'main_page.html'
-
     def get_queryset(self):
         user = self.request.user
         return Follow.objects.filter(user=user)
@@ -44,6 +44,7 @@ class Home_list_view(ListView):
 
         data['user'] = self.request.user
         data['object_list'] = data['object_list'][:6]
+        data['form'] = TweetForm()
         return data
 
 
@@ -75,48 +76,52 @@ class Profile_list_view(ListView):
         return data
 
 
-def tweet_view(request):
+def create_tweet(request):
     if request.method == 'POST':
-        try:
-            author = request.user
-            content = request.POST.get('content')  # Используем get для безопасного доступа
-            print(content)
-            print(author)
-            if content:
-                tweet = Tweet.objects.create(author=author, content=content)
-                tweet.save()
-                # Формируем данные для ответа
-                response_data = {
-                    'id': tweet.id,
-                    'author_username': tweet.author.username,
-                    'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),  # Форматируем дату
-                    'content': tweet.content
-                }
+        form = TweetForm(request.POST)
+        if form.is_valid():
+            print("FORM VALID")
+            tweet = form.save(commit=False)
+            tweet.author = request.user
+            tweet.save()
+            hashtags_list = form.cleaned_data['hashtags']
+            for tag in hashtags_list:
+                hashtag, created = Hashtag.objects.get_or_create(text=tag)
+                tweet.hashtags.add(hashtag)
 
-                # Проверяем, является ли запрос AJAX
-                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                    return JsonResponse(response_data)  # Возвращаем JSON с данными нового твита
-                else:
-                    return redirect('/home')  # Для обычного запроса перенаправляем
+            response_data = {
+                'id': tweet.id,
+                'author_username': tweet.author.username,
+                'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),  # Форматируем дату
+                'content': tweet.content,
+                'hashtag': tweet.hashtags
+            }
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse(response_data)
             else:
-                # Возвращаем ошибку, если контент пустой
-                return JsonResponse({'error': 'Content cannot be empty'}, status=400)
+                return redirect('/home')
 
-        except Exception as e:
-            return JsonResponse({'error': 'An internal error occurred.'}, status=500)
-
-    return redirect('/home')  # Укажите свой шаблон
+        else:
+            return JsonResponse({'error': 'not valid form'}, status=400)
+    else:
+        form = TweetForm(request.POST)
+    return redirect('/home')
 
 
 def tweet_detail(request, tweet_id):
-    tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
-        data = {
-            'author': tweet.author.username,
-            'content': tweet.content,
-            'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
-        }
-        return JsonResponse(data)
+    if request.method == 'GET':
+        tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
+            data = {
+                'author': tweet.author.username,
+                'content': tweet.content,
+                'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            return JsonResponse(data)
+    if request.method == 'PUT':
+        pass
+    if request.method == 'DELETE':
+        pass
 
 
 @require_POST
