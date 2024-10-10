@@ -136,14 +136,49 @@ a{
     position: relative;
 }
 
-.searchbox{
+.searchbox {
+    margin-left: 20px;
     background: #f0f2f5;
     border-radius: 20px;
     display: flex;
     align-items: center;
-    padding: 0 15px;
-    max-width: 250px; /* Установи максимальную ширину контейнера */
-    width: 100%; /* Устанавливает контейнер на всю доступную ширину родительского */
+    max-width: 250px; /* Максимальная ширина контейнера */
+    width: 100%; /* Контейнер будет занимать всю доступную ширину */
+    padding: 0; /* Убираем padding контейнера */
+}
+
+.searchbox input {
+    margin-left: 10px;
+    flex-grow: 1; /* Поле ввода занимает все оставшееся пространство */
+    border: none;
+    outline: none;
+    font-size: 13px;
+    border-radius: 20px 0 0 20px; /* Закругленные края слева */
+}
+
+/* Кнопка поиска */
+.search-button {
+    background-color: #1da1f2; /* Синий цвет фона */
+    border: none;
+    padding: 10px 10px; /* Внутренние отступы для кнопки */
+    cursor: pointer;
+    border-radius: 0 20px 20px 0; /* Закругленные края справа */
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* Белая иконка */
+}
+
+/* Размер иконки */
+.search-button i {
+    font-size: 14px;
+    color: white; /* Цвет белой лупы */
+}
+
+/* Эффект наведения на кнопку */
+.search-button:hover {
+    background-color: #0d8dd3; /* Темно-синий цвет при наведении */
 }
 
 .navbar-left{

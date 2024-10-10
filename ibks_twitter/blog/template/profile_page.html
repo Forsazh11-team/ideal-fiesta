@@ -15,10 +15,12 @@
     <div class="navbar-left">
         {% load static %}
         <a href="/home" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <form action="{% url 'search_by_hashtag' %}" method="get">
         <div class="searchbox">
-            <img src="{% static 'img/search.png' %}">
-            <input type="text" placeholder="Search">
+            <input type="text" name="tag" placeholder="Enter hashtag">
+            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
         </div>
+        </form>
     </div>
     <div class="navbar-center">
     </div>
