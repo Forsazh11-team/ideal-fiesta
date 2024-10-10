@@ -14,7 +14,7 @@
    <nav class="navbar">
     <div class="navbar-left">
         {% load static %}
-        <a href="home/" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <a href="/home" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
         <div class="searchbox">
             <img src="{% static 'img/search.png' %}">
             <input type="text" placeholder="Search">
@@ -30,7 +30,7 @@
             <div class="user-info">
                 <img src="{{auth_user.profile.image.url}}" alt="">
                 <div>
-                    <h3><a href="/{{auth_user.username}}" class="profile-menu-links">{{auth_user.username}}</a></h3>
+                    <h3><a href="/profile/{{auth_user.username}}" class="profile-menu-links">{{auth_user.username}}</a></h3>
                 </div>
             </div>
             <a href="/settings" class="profile-menu-links">
@@ -68,7 +68,9 @@
                     <div class="stat-item">
                         <span>Количество постов: <strong>{{tweets.count}}</strong></span>
                     </div>
-                    <button class="follow-button">Отслеживать</button>
+                    {% if flag_track%}
+                        <button class="follow-button">Отслеживать</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -123,7 +125,7 @@
                 <ul class="subscriptions-list">
                     {% for user in object_list %}
                     <li class="subscription-item">
-                       <button onclick="location.href='/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
+                       <button onclick="location.href='/profile/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
                         <img style="width: 20px; height: 20px;" src="{{ user.follow_user.profile.image.url }}">
                         <span>{{ user.follow_user.username }}</span>
                         </button>
@@ -232,16 +234,49 @@
         event.stopPropagation(); // Останавливает всплытие события
         const likeBtn = document.getElementById(`likeBtn-${tweetId}`);
         const isLiked = likeBtn.getAttribute('data-liked') === 'true';
-        if (isLiked) {
-                // Если кнопка уже была нажата (лайкнута), снимаем лайк
-                likeBtn.setAttribute('data-liked', 'false');
-                likeBtn.innerHTML = '<i class="far fa-heart"></i>'; // Обведённое сердце
-            } else {
-                // Если не была нажата, добавляем лайк
+        // AJAX-запрос для обновления лайка в базе данных
+        fetch(`/like/${tweetId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({ liked: !isLiked }) // Отправляем статус лайка
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.liked) {
                 likeBtn.setAttribute('data-liked', 'true');
                 likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #e74c3c;"></i>'; // Закрашенное сердце
+            } else {
+                likeBtn.setAttribute('data-liked', 'false');
+                likeBtn.innerHTML = '<i class="far fa-heart"></i>'; // Обведённое сердце
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
+
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
     function addComment(tweetId) {
         const commentInput = document.getElementById(`comment-${tweetId}`).value;
