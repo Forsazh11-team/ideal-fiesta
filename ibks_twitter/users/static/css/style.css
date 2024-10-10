@@ -454,6 +454,20 @@ a{
     margin-right: 8px;
 }
 
+
+.post-activity-link button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.post-activity-link button:hover {
+    transform: scale(1.1);
+}
+
 .comments-section {
     border-top: 1px solid #e0e0e0; /* Граница сверху для разделения */
     padding-top: 10px; /* Отступ сверху */
@@ -510,7 +524,7 @@ a{
 .comment-line {
   border: none;
   border-top: 1px solid #ddd;
-  margin: 10px 0;
+  margin: 2px 0;
 }
 
 .comment-item textarea::-webkit-scrollbar {

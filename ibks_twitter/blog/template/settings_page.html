@@ -9,6 +9,37 @@
 
     <title>Настройки пользователя</title>
 </head>
+    <nav class="navbar">
+    <div class="navbar-left">
+        {% load static %}
+        <a href="/home/" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <div class="searchbox">
+            <img src="{% static 'img/search.png' %}">
+            <input type="text" placeholder="Search">
+        </div>
+    </div>
+    <div class="navbar-center">
+        <ul>
+            <li class="notification-icon">
+                <a href="#" id="notification-button">
+                    <img src="{% static 'img/bell.png' %}">
+                    <span>Notifications</span>
+                </a>
+                <!-- Всплывающее окно с уведомлениями -->
+                <div id="notification-popup" class="notification-popup">
+                    <h4>Notifications</h4>
+                    <ul>
+                        <li><a href="#">New friend request</a></li>
+                        <li><a href="#">Message from John</a></li>
+                        <li><a href="#">Your post got a like!</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-right">
+        <img src="{{user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
+    </div>
     <div class="settings-container">
         <div class="sidebar">
             <h2>Настройки</h2>

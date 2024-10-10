@@ -7,6 +7,8 @@
     {% load static %}
     <title>Profile page</title>
     <link rel="stylesheet"  href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
    <nav class="navbar">
@@ -82,15 +84,12 @@
             <div class="post-content">
                 {{tweet.content}}
             </div>
-            <div class="post-stats">
-                <div>
-                    <span>{{tweet.likes}} likes</span>
-                </div>
-            </div>
             <div class="post-activity">
                 <div class="post-activity-link">
-                    <img src="{% static 'img/like.png' %}" alt="">
-                    <span>Like</span>
+                    <button id="likeBtn-{{tweet.id}}" class="like-btn" data-liked="false" onclick=" likeClick(event, {{tweet.id}})">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <span>{{tweet.likes}}</span>
                 </div>
             </div>
         </div>
@@ -202,6 +201,25 @@
         if (event.target === modal) {
             closeModal();
         }
+    }
+
+    function childClick(event) {
+        event.stopPropagation(); // Останавливает всплытие события
+    }
+
+    function likeClick(event, tweetId) {
+        event.stopPropagation(); // Останавливает всплытие события
+        const likeBtn = document.getElementById(`likeBtn-${tweetId}`);
+        const isLiked = likeBtn.getAttribute('data-liked') === 'true';
+        if (isLiked) {
+                // Если кнопка уже была нажата (лайкнута), снимаем лайк
+                likeBtn.setAttribute('data-liked', 'false');
+                likeBtn.innerHTML = '<i class="far fa-heart"></i>'; // Обведённое сердце
+            } else {
+                // Если не была нажата, добавляем лайк
+                likeBtn.setAttribute('data-liked', 'true');
+                likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #e74c3c;"></i>'; // Закрашенное сердце
+            }
     }
 
 </script>
