@@ -43,7 +43,6 @@
             </a>
         </div>
     </div>
-
    </nav>
    <div class="container">
     <div class="main">
@@ -128,6 +127,14 @@
             <h2 id="modal-author"></h2>
             <p id="modal-content"></p>
             <small id="modal-date"></small>
+            <div class="post-activity">
+                <div class="post-activity-link">
+                    <button id="likeBtn-{{tweet.id}}" class="like-btn" data-liked="false" onclick=" likeClick(event, {{tweet.id}})">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <span>{{tweet.likes}}</span>
+                </div>
+            </div>
         </div>
     </div>
 <script>
