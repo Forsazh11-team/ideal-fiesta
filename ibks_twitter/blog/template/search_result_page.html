@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% load static %}
+    <title>Home page</title>
+    <link rel="stylesheet"  href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+   <nav class="navbar">
+    <div class="navbar-left">
+        {% load static %}
+        <a href="/home" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <div class="searchbox">
+            <img src="{% static 'img/search.png' %}">
+            <input type="text" placeholder="Поиск">
+        </div>
+    </div>
+    <div class="navbar-center">
+    </div>
+    <div class="navbar-right">
+        <img src="{{user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
+    </div>
+    <div class="profile-menu-wrap" id="profileMenu">
+        <div class="profile-menu">
+            <div class="user-info">
+                <img src="{{user.profile.image.url}}" alt="">
+                <div>
+                    <h3><a href="/profile/{{user.username}}" class="profile-menu-links">{{user.username}}</a></h3>
+                </div>
+            </div>
+            <a href="/settings" class="profile-menu-links">
+                <img src="{% static 'img/settings.png' %}" alt="">
+                <p>Настройки</p>
+            </a>
+            <a href="#" class="profile-menu-links">
+                <img src="{% static 'img/logout.png' %}" alt="">
+                <p>Выход</p>
+            </a>
+        </div>
+    </div>
+
+   </nav>
+   <div class="container">
+    <div class="main">
+        {% if flag_posts %}
+        {% for tweet in tweets %}
+        <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
+            <div class="post-author">
+                <img src=" {{ tweet.author.profile.image.url }}">
+                <div>
+                    <a href="/{{tweet.author.username}}"><h1>{{tweet.author.username}}</h1></a>
+                    <small>{{tweet.date_posted}}</small>
+                </div>
+            </div>
+            <div class="post-content">
+                {{tweet.content}}
+            </div>
+            <div class="post-activity">
+                <div class="post-activity-link">
+                    <button id="likeBtn-{{tweet.id}}" class="like-btn" data-liked="{% if tweet.id in liked_tweet_ids %}true{% else %}false{% endif %}" onclick=" likeClick(event, {{tweet.id}})">
+                        {% if tweet.id in liked_tweet_ids %}
+                            <i class="fas fa-heart" style="color: #e74c3c;"></i> <!-- Закрашенное сердце -->
+                        {% else %}
+                            <i class="far fa-heart"></i> <!-- Обведённое сердце -->
+                        {% endif %}
+                    </button>
+                    <span id="likeCount-{{ tweet.id }}">{{ tweet.likes }}</span>
+                </div>
+            </div>
+            <div class="comment-section" onclick="childClick(event)">
+                 <!-- Список комментариев -->
+                <div id="comment-list-{{tweet.id}}">
+                    <hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="{% static 'img/start.jpg' %}">
+                        <div class="comment-content">
+                            <strong>user</strong>
+                            <p>comment</p>
+                            <span class="comment-date">09 октября 2024</span>
+                        </div>
+                    </div>
+                </div>
+              <!-- Секция для добавления нового комментария -->
+                <div class="comment-item" onclick="childClick(event)">
+                    <img src="{% static 'img/start.jpg' %}">
+                    <textarea rows=1 class="comment-input" id="comment-{{tweet.id}}" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
+                    <button class="submit-comment" onclick="addComment({{tweet.id}})">Отправить</button>
+                </div>
+            </div>
+        </div>
+         {% endfor %}
+         {% endif %}
+        <div class="right-sidebar">
+            <div class="subscriptions-panel">
+                <h3>Ваши подписки</h3>
+                <ul class="subscriptions-list">
+                    {% for user in object_list %}
+                    <li class="subscription-item">
+                       <button onclick="location.href='/profile/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
+                        <img style="width: 20px; height: 20px;" src="{{ user.follow_user.profile.image.url }}">
+                        <span>{{ user.follow_user.username }}</span>
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Модальное окно -->
+    <div id="tweetModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-author"></h2>
+            <p id="modal-content"></p>
+            <small id="modal-date"></small>
+        </div>
+    </div>
+<script>
+    let profileMenu = document.getElementById("profileMenu");
+    function toggleMenu(){
+        profileMenu.classList.toggle("open-menu");
+    }
+
+
+    // Функция для открытия/закрытия меню профиля
+    function toggleMenu() {
+        var menu = document.getElementById("profileMenu");
+        menu.classList.toggle("open-menu");
+    }
+
+    // Закрываем меню при клике вне его
+    document.addEventListener("click", function(event) {
+    var menu = document.getElementById("profileMenu");
+    var profileImage = document.querySelector(".nav-profile-img");
+    // Проверяем, если клик был за пределами меню и изображения профиля
+    if (!menu.contains(event.target) && !profileImage.contains(event.target)) {
+        menu.classList.remove("open-menu"); // Закрываем меню
+    }
+    });
+
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // Сбрасываем высоту
+        textarea.style.height = textarea.scrollHeight + 'px'; // Устанавливаем новую высоту
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+    const notificationButton = document.getElementById("notification-button");
+    const notificationPopup = document.getElementById("notification-popup");
+
+    // Функция для переключения видимости окна
+    function toggleNotification() {
+        notificationPopup.classList.toggle("show");
+    }
+
+    // Открываем/закрываем уведомления при клике на иконку
+    notificationButton.addEventListener("click", function(event) {
+        event.stopPropagation(); // Останавливаем всплытие события, чтобы клик по кнопке не закрывал окно
+        toggleNotification();
+    });
+
+    // Закрываем уведомления при клике в любом другом месте страницы
+    document.addEventListener("click", function(event) {
+        // Проверяем, находится ли клик вне области окна с уведомлениями
+        if (!notificationPopup.contains(event.target) && notificationPopup.classList.contains("show")) {
+            notificationPopup.classList.remove("show");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#submit_button').click(function (e) {
+            e.preventDefault(); // Отменяем стандартное поведение формы
+
+            var tweetContent = $('tweet_content').val();  // Получаем содержимое твита
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // Получаем CSRF-токен
+
+            if (tweetContent.trim() === "") {
+                return;
+            }
+
+            // Отправляем данные через AJAX
+            $.ajax({
+                url: $('#post_form').attr('action'),  // URL формы
+                type: 'POST',
+                data: {
+                    content: tweetContent,
+                    csrfmiddlewaretoken: csrfToken
+                },
+                success: function (response) {
+                    // Добавляем новый твит в начало списка
+                    var newTweetHtml = `
+                        <div class="post" data-post-id="${response.id}">
+                            <div class="post-author">
+                                <img src="${response.author_image}" alt="">
+                                <div>
+                                    <a href="/${response.author_username}"><h1>${response.author_username}</h1></a>
+                                    <small>${response.date_posted}</small>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                ${response.content}
+                            </div>
+                            <div class="post-activity">
+                            <div class="post-activity-link">
+                            <button id="likeBtn-${response.id}" class="like-btn" data-liked="false" onclick=" likeClick(event, ${response.id})">
+                            <i class="far fa-heart"></i>
+                            </button>
+                            <span>{{tweet.likes}}</span>
+                            </div>
+                            </div>
+                            <div class="comment-section" onclick="childClick(event)">
+                            <!-- Список комментариев -->
+                            <div id="comment-list-${response.id}">
+                            </div>
+                            <!-- Секция для добавления нового комментария -->
+                            <div class="comment-item" onclick="childClick(event)">
+                            <img src="{% static 'img/start.jpg' %}">
+                            <textarea rows=1 class="comment-input" id="comment-${response.id}" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
+                            <button class="submit-comment" onclick="addComment(${response.id})">Отправить</button>
+                            </div>
+                            </div>`;
+
+                    // Добавляем новый твит в начало списка
+                    $('#new_tweets').prepend(newTweetHtml);
+
+                    // Очищаем поле ввода
+                    $('#tweet_content').val('');
+                },
+                error: function (xhr, status, error) {
+                    alert("Error: Unable to post tweet. Please try again.");
+                }
+            });
+        });
+    });
+});
+
+
+    function openModal(tweetId) {
+        $.ajax({
+        url: `/tweet/${tweetId}/`,
+        type: 'GET',
+        success: function(data) {
+            // Заполнение модального окна данными твита
+            document.getElementById('modal-author').textContent = data.author;
+            document.getElementById('modal-content').textContent = data.content;
+            document.getElementById('modal-date').textContent = data.date_posted;
+
+            // Отображение модального окна
+            document.getElementById('tweetModal').style.display = 'block';
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    });
+    }
+    function closeModal() {
+        const modal = document.getElementById("tweetModal");
+        modal.style.display = "none";  // Скрываем модальное окно
+    }
+
+    // Закрытие модального окна при клике вне его содержимого
+    window.onclick = function(event) {
+        const modal = document.getElementById("tweetModal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+
+    $(document).ready(function() {
+    // Устанавливаем обработчик события клика на все твиты
+    $('#new_tweets').on('click', '.post', function() {
+        var tweetId = $(this).attr('data-post-id');
+        openModal(tweetId)
+    });
+});
+
+
+    function addComment(tweetId) {
+        const commentInput = document.getElementById(`comment-${tweetId}`).value;
+        if (commentInput.trim() === "") {
+            alert("Комментарий не может быть пустым");
+            return;
+        }
+        const now = new Date();
+        const time = now.toLocaleString();
+        var newComment = `<hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="{% static 'img/start.jpg' %}">
+                        <div class="comment-content">
+                            <strong>user</strong>
+                            <p>${commentInput.trim()}</p>
+                            <span class="comment-date">${time}</span>
+                        </div>
+                    </div>`
+        $(`#comment-list-${tweetId}`).append(newComment);
+        $(`#comment-${tweetId}`).val('');
+    }
+
+    function childClick(event) {
+        event.stopPropagation(); // Останавливает всплытие события
+    }
+
+    function likeClick(event, tweetId) {
+        event.stopPropagation(); // Останавливает всплытие события
+        const likeBtn = document.getElementById(`likeBtn-${tweetId}`);
+        const likeCountSpan = document.getElementById(`likeCount-${tweetId}`);
+        const isLiked = likeBtn.getAttribute('data-liked') === 'true';
+        // AJAX-запрос для обновления лайка в базе данных
+        fetch(`/like/${tweetId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({ liked: !isLiked }) // Отправляем статус лайка
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.liked) {
+                likeBtn.setAttribute('data-liked', 'true');
+                likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #e74c3c;"></i>'; // Закрашенное сердце
+                likeCountSpan.textContent = parseInt(likeCountSpan.textContent) + 1;
+            } else {
+                likeBtn.setAttribute('data-liked', 'false');
+                likeBtn.innerHTML = '<i class="far fa-heart"></i>'; // Обведённое сердце
+                likeCountSpan.textContent = parseInt(likeCountSpan.textContent) - 1; // Уменьшаем счётчик
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+</script>
+</body>
