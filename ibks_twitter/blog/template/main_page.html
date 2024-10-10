@@ -49,15 +49,20 @@
    </nav>
    <div class="container">
     <div class="main">
-        <form class="create-post-form" id="post_form" action="/tweet/" method="POST">
+    <form class="create-post-form" id="post_form" action="/tweet/" method="POST">
             {% csrf_token %}
-        <div class="create-post">
-            {{form.as_p}}
-              <div class="create-post-links">
-                    <button type="submit" id="submit_button">Поделиться</button>
-             </div>
+            <div class="create-post">
+             <div class="form-container">
+                <div class="textarea-container">
+                    <div class="textarea-first">{{ form.content }}</div>
+                </div>
+                <div class="textarea-container textarea-second-line">
+                    <div class="textarea-second">{{ form.hashtags }}</div>
+                    <button type="submit" class="submit-button">Submit</button>
+                </div>
+            </div>
         </div>
-        </form>
+    </form>
         <a href ="/tweet" onclick="handleClick(event)"><div id="new_tweets"></div></a>
         {% if flag_posts %}
         {% for tweet in tweets %}

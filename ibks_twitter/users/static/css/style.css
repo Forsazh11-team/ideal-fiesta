@@ -338,21 +338,103 @@ a{
     flex-basis: 75%;  
 }
 
-.create-post{
-    display: flex; /* Используем flexbox для расположения элементов в ряд */
-    align-items: center; /* Выравниваем элементы по вертикали по центру */
+
+.form-container {
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение контейнеров */
+    gap: 10px; /* Отступы между textarea */
+    width: 100%; /* Контейнер занимает всю возможную ширину */
+}
+
+.textarea-container {
+    display: flex;
+    width: 100%; /* Контейнеры занимают всю ширину */
+}
+
+.textarea-first {
+    width: 100%; /* Первое textarea занимает всю ширину */
     padding: 10px;
-    background-color: #ffffff; /* Цвет фона поста */
-    border-radius: 8px; /* Закругление углов */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень */
+    box-sizing: border-box; /* Учитывает padding в ширине */
+    width: 100%; /* Ширина текстового поля */
+}
+.textarea-first textarea{
+    width: 100%; /* Ширина текстового поля */
+    padding: 10px;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    resize: none;
+    flex-grow: 1;
+    transition: border-color 0.3s;
+}
+
+.textarea-first textarea:focus {
+    border-color: #1da1f2;
+    outline: none;
+}
+
+.textarea-first textarea::-webkit-scrollbar {
+    width: 0px;
+}
+
+.textarea-second-line {
+    display: flex;
+    justify-content: space-between; /* Выравниваем элементы по краям */
+    align-items: center; /* Выравниваем по вертикали */
+    margin-top: -20px;
 
 }
 
-.create-post-input {
-    display: flex; /* Используем flexbox для изображения и текстового поля */
-    align-items: center; /* Вертикальное выравнивание */
-    flex-grow: 1; /* Позволяем текстовому полю занимать доступное пространство */
+.textarea-second {
+    flex-grow: 1; /* Второе textarea занимает всё доступное пространство */
+    padding: 10px;
+    box-sizing: border-box;
+    margin-right: 5px; /* Отступ для кнопки */
 }
+
+.textarea-second textarea{
+    width: 100%; /* Ширина текстового поля */
+    padding: 10px;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    resize: none;
+    flex-grow: 1;
+    transition: border-color 0.3s;
+}
+
+.textarea-second textarea:focus {
+    border-color: #1da1f2;
+    outline: none;
+}
+
+.textarea-second textarea::-webkit-scrollbar {
+    width: 0px;
+}
+
+.submit-button {
+    margin-top: -5px;
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #0d8dd3;
+}
+
+.create-post {
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение содержимого */
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Для абсолютного позиционирования кнопки */
+}
+
 
 .create-post-input img{
     width: 35px;
@@ -360,49 +442,10 @@ a{
     margin-right: 10px; 
 }
 
-.create-post-input textarea::-webkit-scrollbar {
-    width: 0px;
-}
-
-.create-post-input textarea {
-    width: 100%; /* Ширина текстового поля */
-    padding: 10px; /* Внутренние отступы */
-    border: 1px solid #d1d1d1; /* Рамка текстового поля */
-    border-radius: 4px; /* Закругление углов текстового поля */
-    resize: none; /* Запрет изменения размера текстового поля */
-    transition: border-color 0.3s; /* Плавный переход цвета рамки */
-}
-
-.create-post-input textarea:focus {
-    border-color: #1da1f2; /* Цвет рамки при фокусе */
-    outline: none; /* Убираем стандартное выделение */
-}
-
 ::placeholder{
     font-weight: 500;
 }
 
-.create-post-links{
-    margin-left: 10px; /* Отступ между текстовым полем и кнопкой */
-}
-
-.create-post-links button {
-    background-color: #1da1f2; /* Цвет фона кнопки */
-    color: white; /* Цвет текста кнопки */
-    padding: 10px 15px; /* Внутренние отступы кнопки */
-    border-radius: 4px; /* Закругление углов кнопки */
-    transition: background-color 0.3s; /* Плавный переход цвета фона */
-    border: none;
-    outline: none;
-}
-
-.create-post-links button:hover {
-    background-color: #0d8dd3; /* Цвет фона кнопки при наведении */
-}
-
-.create-post-links button:focus {
-    outline: none; /* Убираем обводку при фокусе */
-}
 
 .post{
     cursor: pointer;
