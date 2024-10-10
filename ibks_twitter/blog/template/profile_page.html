@@ -89,10 +89,14 @@
             </div>
             <div class="post-activity">
                 <div class="post-activity-link">
-                    <button id="likeBtn-{{tweet.id}}" class="like-btn" data-liked="false" onclick=" likeClick(event, {{tweet.id}})">
-                        <i class="far fa-heart"></i>
+                    <button id="likeBtn-{{tweet.id}}" class="like-btn" data-liked="{% if tweet.id in liked_tweet_ids %}true{% else %}false{% endif %}" onclick=" likeClick(event, {{tweet.id}})">
+                        {% if tweet.id in liked_tweet_ids %}
+                            <i class="fas fa-heart" style="color: #e74c3c;"></i> <!-- Закрашенное сердце -->
+                        {% else %}
+                            <i class="far fa-heart"></i> <!-- Обведённое сердце -->
+                        {% endif %}
                     </button>
-                    <span>{{tweet.likes}}</span>
+                    <span id="likeCount-{{ tweet.id }}">{{ tweet.likes }}</span>
                 </div>
             </div>
             <div class="comment-section" onclick="childClick(event)">
@@ -230,9 +234,31 @@
         event.stopPropagation(); // Останавливает всплытие события
     }
 
+    function addComment(tweetId) {
+        const commentInput = document.getElementById(`comment-${tweetId}`).value;
+        if (commentInput.trim() === "") {
+            alert("Комментарий не может быть пустым");
+            return;
+        }
+        const now = new Date();
+        const time = now.toLocaleString();
+        var newComment = `<hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="{% static 'img/start.jpg' %}">
+                        <div class="comment-content">
+                            <strong>user</strong>
+                            <p>${commentInput.trim()}</p>
+                            <span class="comment-date">${time}</span>
+                        </div>
+                    </div>`
+        $(`#comment-list-${tweetId}`).append(newComment);
+        $(`#comment-${tweetId}`).val('');
+    }
+
     function likeClick(event, tweetId) {
         event.stopPropagation(); // Останавливает всплытие события
         const likeBtn = document.getElementById(`likeBtn-${tweetId}`);
+        const likeCountSpan = document.getElementById(`likeCount-${tweetId}`);
         const isLiked = likeBtn.getAttribute('data-liked') === 'true';
         // AJAX-запрос для обновления лайка в базе данных
         fetch(`/like/${tweetId}/`, {
@@ -253,9 +279,11 @@
             if (data.liked) {
                 likeBtn.setAttribute('data-liked', 'true');
                 likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #e74c3c;"></i>'; // Закрашенное сердце
+                likeCountSpan.textContent = parseInt(likeCountSpan.textContent) + 1;
             } else {
                 likeBtn.setAttribute('data-liked', 'false');
                 likeBtn.innerHTML = '<i class="far fa-heart"></i>'; // Обведённое сердце
+                likeCountSpan.textContent = parseInt(likeCountSpan.textContent) - 1; // Уменьшаем счётчик
             }
         })
         .catch(error => {
@@ -277,27 +305,6 @@
     }
     return cookieValue;
 }
-
-    function addComment(tweetId) {
-        const commentInput = document.getElementById(`comment-${tweetId}`).value;
-        if (commentInput.trim() === "") {
-            alert("Комментарий не может быть пустым");
-            return;
-        }
-        const now = new Date();
-        const time = now.toLocaleString();
-        var newComment = `<hr class="comment-line">
-                    <div class="comment-item">
-                        <img src="{% static 'img/start.jpg' %}">
-                        <div class="comment-content">
-                            <strong>user</strong>
-                            <p>${commentInput.trim()}</p>
-                            <span class="comment-date">${time}</span>
-                        </div>
-                    </div>`
-        $(`#comment-list-${tweetId}`).append(newComment);
-        $(`#comment-${tweetId}`).val('');
-    }
 
 </script>
 </body>

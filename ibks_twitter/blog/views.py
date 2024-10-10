@@ -63,6 +63,8 @@ class Profile_list_view(ListView):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         try:
             tweets = Tweet.objects.filter(author=user).order_by('-date_posted')
+            liked_tweet_ids = Like.objects.filter(user=self.request.user).values_list('tweet_id', flat=True)
+            data['liked_tweet_ids'] = list(liked_tweet_ids)
             data['flag_posts'] = True
             data['tweets'] = tweets
         except:
