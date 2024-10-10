@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {% load static %}
-    <title>Profile page</title>
+    <title>Профиль</title>
     <link rel="stylesheet"  href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -35,11 +35,11 @@
             </div>
             <a href="/settings" class="profile-menu-links">
                 <img src="{% static 'img/settings.png' %}" alt="">
-                <p>Settings</p>
+                <p>Настройки</p>
             </a>
             <a href="#" class="profile-menu-links">
                 <img src="{% static 'img/logout.png' %}" alt="">
-                <p>Logout</p>
+                <p>Выход</p>
             </a>
         </div>
     </div>
@@ -60,14 +60,15 @@
                 </div>
                 <div class="stats-panel">
                     <div class="stat-item">
-                        <span>Followers: <strong>{{user.profile.followers}}</strong></span>
+                        <span>Подписчики: <strong>{{user.profile.followers}}</strong></span>
                     </div>
                     <div class="stat-item">
-                        <span>Following: <strong>{{user.profile.following}}</strong></span>
+                        <span>Подписки: <strong>{{user.profile.following}}</strong></span>
                     </div>
                     <div class="stat-item">
-                        <span>Posts: <strong>{{tweets.count}}</strong></span>
+                        <span>Количество постов: <strong>{{tweets.count}}</strong></span>
                     </div>
+                    <button class="follow-button">Отслеживать</button>
                 </div>
             </div>
         </div>
@@ -92,13 +93,33 @@
                     <span>{{tweet.likes}}</span>
                 </div>
             </div>
+            <div class="comment-section" onclick="childClick(event)">
+                 <!-- Список комментариев -->
+                <div id="comment-list-{{tweet.id}}">
+                    <hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="{% static 'img/start.jpg' %}">
+                        <div class="comment-content">
+                            <strong>user</strong>
+                            <p>comment</p>
+                            <span class="comment-date">09 октября 2024</span>
+                        </div>
+                    </div>
+                </div>
+              <!-- Секция для добавления нового комментария -->
+                <div class="comment-item" onclick="childClick(event)">
+                    <img src="{% static 'img/start.jpg' %}">
+                    <textarea rows=1 class="comment-input" id="comment-{{tweet.id}}" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
+                    <button class="submit-comment" onclick="addComment({{tweet.id}})">Отправить</button>
+                </div>
+            </div>
         </div>
         {% endfor %}
         {% endif %}
     </div>
         <div class="right-sidebar">
             <div class="subscriptions-panel">
-                <h3>Your Followings</h3>
+                <h3>Ваши подписки</h3>
                 <ul class="subscriptions-list">
                     {% for user in object_list %}
                     <li class="subscription-item">
@@ -220,6 +241,27 @@
                 likeBtn.setAttribute('data-liked', 'true');
                 likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #e74c3c;"></i>'; // Закрашенное сердце
             }
+    }
+
+    function addComment(tweetId) {
+        const commentInput = document.getElementById(`comment-${tweetId}`).value;
+        if (commentInput.trim() === "") {
+            alert("Комментарий не может быть пустым");
+            return;
+        }
+        const now = new Date();
+        const time = now.toLocaleString();
+        var newComment = `<hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="{% static 'img/start.jpg' %}">
+                        <div class="comment-content">
+                            <strong>user</strong>
+                            <p>${commentInput.trim()}</p>
+                            <span class="comment-date">${time}</span>
+                        </div>
+                    </div>`
+        $(`#comment-list-${tweetId}`).append(newComment);
+        $(`#comment-${tweetId}`).val('');
     }
 
 </script>

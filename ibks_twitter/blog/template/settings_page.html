@@ -6,41 +6,38 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/edit.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
     <title>Настройки пользователя</title>
 </head>
+<body>
     <nav class="navbar">
     <div class="navbar-left">
-        {% load static %}
         <a href="/home/" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
-        <div class="searchbox">
-            <img src="{% static 'img/search.png' %}">
-            <input type="text" placeholder="Search">
-        </div>
     </div>
     <div class="navbar-center">
-        <ul>
-            <li class="notification-icon">
-                <a href="#" id="notification-button">
-                    <img src="{% static 'img/bell.png' %}">
-                    <span>Notifications</span>
-                </a>
-                <!-- Всплывающее окно с уведомлениями -->
-                <div id="notification-popup" class="notification-popup">
-                    <h4>Notifications</h4>
-                    <ul>
-                        <li><a href="#">New friend request</a></li>
-                        <li><a href="#">Message from John</a></li>
-                        <li><a href="#">Your post got a like!</a></li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
     </div>
     <div class="navbar-right">
         <img src="{{user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
     </div>
-    <div class="settings-container">
+    <div class="profile-menu-wrap" id="profileMenu">
+        <div class="profile-menu">
+            <div class="user-info">
+                <img src="{{user.profile.image.url}}" alt="">
+                <div>
+                    <h3><a href="/{{user.username}}" class="profile-menu-links">{{user.username}}</a></h3>
+                </div>
+            </div>
+            <a href="/home" class="profile-menu-links">
+                <img src="{% static 'img/home.png' %}" alt="">
+                <p>На главную страницу</p>
+            </a>
+            <a href="#" class="profile-menu-links">
+                <img src="{% static 'img/logout.png' %}" alt="">
+                <p>Выход</p>
+            </a>
+        </div>
+    </div>
+   </nav>
+    <div class="container">
         <div class="sidebar">
             <h2>Настройки</h2>
             <ul>
@@ -82,23 +79,46 @@
             </form>
         </div>
     </div>
-    <script>
-        function previewImage(event) {
-            const preview = document.getElementById('preview');
-            const file = event.target.files[0];
-            const reader = new FileReader();
+<script>
+    function previewImage(event) {
+        const preview = document.getElementById('preview');
+        const file = event.target.files[0];
+        const reader = new FileReader();
 
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-            };
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        };
 
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
                 preview.src = '#'; // Установите изображение по умолчанию, если файл не выбран
             }
         }
-    </script>
+
+
+        let profileMenu = document.getElementById("profileMenu");
+        function toggleMenu(){
+            profileMenu.classList.toggle("open-menu");
+        }
+
+
+    // Функция для открытия/закрытия меню профиля
+        function toggleMenu() {
+            var menu = document.getElementById("profileMenu");
+            menu.classList.toggle("open-menu");
+        }
+
+    // Закрываем меню при клике вне его
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("profileMenu");
+            var profileImage = document.querySelector(".nav-profile-img");
+    // Проверяем, если клик был за пределами меню и изображения профиля
+            if (!menu.contains(event.target) && !profileImage.contains(event.target)) {
+        menu.classList.remove("open-menu"); // Закрываем меню
+    }
+});
+</script>
 </body>
 </html>
 

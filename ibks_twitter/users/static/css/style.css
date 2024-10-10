@@ -138,18 +138,19 @@ a{
 
 .searchbox{
     background: #f0f2f5;
-    width: 250px;
     border-radius: 20px;
     display: flex;
     align-items: center;
     padding: 0 15px;
-
+    max-width: 250px; /* Установи максимальную ширину контейнера */
+    width: 100%; /* Устанавливает контейнер на всю доступную ширину родительского */
 }
 
 .navbar-left{
     display: flex;
     align-items: center;
 }
+
 
 .searchbox img{
     width: 14px;
@@ -158,10 +159,9 @@ a{
 .searchbox input{
     width: 100%;
     background: transparent;
-    padding: 8px;
+    padding: 5px;
     outline:none;
     border: 0;
-
 }
 
 
@@ -246,7 +246,7 @@ a{
 .subscriptions-panel {
     position: fixed;
     right: 20px; /* Добавляем отступ справа */
-    top: 100px;
+    top: 78px;
     width: 300px; /* Увеличиваем ширину панели */
     border-radius: 8px;    
     background-color: #ffffff;
@@ -577,7 +577,6 @@ a{
     border: none;
     outline: none;
     margin-left: 10px; /* Отступ между текстовым полем и кнопкой */
-
 }
 
 .comment-item button:hover {
@@ -773,11 +772,14 @@ a{
     margin-left: 25px;
 }
 
+
 .stats-panel {
     display: flex; /* Use Flexbox for layout */
-    justify-content: flex-start; /* Distribute space evenly between items */
+    justify-content: space-between; /* Distribute space evenly between items */
     margin-top: 25px; /* Space above the panel */
+    align-items: center; /* Выравнивание элементов по вертикали */
     margin-left: 15px;
+    margin-right: 15px;
 }
 
 .stat-item {
@@ -788,6 +790,29 @@ a{
 .stat-item span {
     font-weight: 500; /* Make the text bold */
 }
+
+
+.stats-panel button {
+    background-color: #1da1f2; /* Цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    padding: 10px 15px; /* Внутренние отступы кнопки */
+    border-radius: 4px; /* Закругление углов кнопки */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.stats-panel button:hover {
+    background-color: #0d8dd3; /* Цвет фона кнопки при наведении */
+}
+
+.stats-panel button:focus {
+    outline: none; /* Убираем обводку при фокусе */
+}
+
 
 
 

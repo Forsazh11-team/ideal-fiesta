@@ -17,27 +17,10 @@
         <a href="/home/" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
         <div class="searchbox">
             <img src="{% static 'img/search.png' %}">
-            <input type="text" placeholder="Search">
+            <input type="text" placeholder="Поиск">
         </div>
     </div>
     <div class="navbar-center">
-        <ul>
-            <li class="notification-icon">
-                <a href="#" id="notification-button">
-                    <img src="{% static 'img/bell.png' %}">
-                    <span>Notifications</span>
-                </a>
-                <!-- Всплывающее окно с уведомлениями -->
-                <div id="notification-popup" class="notification-popup">
-                    <h4>Notifications</h4>
-                    <ul>
-                        <li><a href="#">New friend request</a></li>
-                        <li><a href="#">Message from John</a></li>
-                        <li><a href="#">Your post got a like!</a></li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
     </div>
     <div class="navbar-right">
         <img src="{{user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
@@ -52,11 +35,11 @@
             </div>
             <a href="/settings" class="profile-menu-links">
                 <img src="{% static 'img/settings.png' %}" alt="">
-                <p>Settings</p>
+                <p>Настройки</p>
             </a>
             <a href="#" class="profile-menu-links">
                 <img src="{% static 'img/logout.png' %}" alt="">
-                <p>Logout</p>
+                <p>Выход</p>
             </a>
         </div>
     </div>
@@ -70,10 +53,10 @@
                 {{ form.as_p }}
                 <div class="create-post-input">
                    <img src="{{user.image}}">
-                   <textarea id="tweet_content" rows="1" placeholder="Say something to world!" oninput="autoResize(this)" required></textarea>
+                   <textarea id="tweet_content" rows="1" placeholder="Поделитесь чем-нибудь!" oninput="autoResize(this)" required></textarea>
                 </div>
               <div class="create-post-links">
-                    <button type="submit" id="submit_button">Tweet</button>
+                    <button type="submit" id="submit_button">Поделиться</button>
              </div>
         </div>
         </form>
@@ -124,7 +107,7 @@
          {% endif %}
         <div class="right-sidebar">
             <div class="subscriptions-panel">
-                <h3>Your Followings</h3>
+                <h3>Ваши подписки</h3>
                 <ul class="subscriptions-list">
                     {% for user in object_list %}
                     <li class="subscription-item">
@@ -233,8 +216,10 @@
                             </div>
                             <div class="post-activity">
                             <div class="post-activity-link">
-                            <img src="{% static 'img/like.png' %}" alt="">
-                            <span>Like</span>
+                            <button id="likeBtn-${response.id}" class="like-btn" data-liked="false" onclick=" likeClick(event, ${response.id})">
+                            <i class="far fa-heart"></i>
+                            </button>
+                            <span>{{tweet.likes}}</span>
                             </div>
                             </div>
                             <div class="comment-section" onclick="childClick(event)">
