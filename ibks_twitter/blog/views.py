@@ -83,6 +83,7 @@ def tweet_view(request):
         try:
             author = request.user
             content = request.POST.get('content')  # Используем get для безопасного доступа
+            print(content)
             if content:
                 tweet = Tweet.objects.create(author=author, content=content)
                 tweet.save()
