@@ -54,11 +54,14 @@
             <div class="create-post">
              <div class="form-container">
                 <div class="textarea-container">
-                    <div class="textarea-first">{{ form.content }}</div>
+                    <div class="textarea-first">
+                        <img src="{{user.profile.image.url}}">
+                        {{ form.content }}
+                    </div>
                 </div>
                 <div class="textarea-container textarea-second-line">
                     <div class="textarea-second">{{ form.hashtags }}</div>
-                    <button type="submit" class="submit-button">Submit</button>
+                    <button type="submit" class="submit-button">Поделиться</button>
                 </div>
             </div>
         </div>

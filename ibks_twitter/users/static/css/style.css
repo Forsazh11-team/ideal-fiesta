@@ -352,11 +352,21 @@ a{
 }
 
 .textarea-first {
+    display: flex;
+    justify-content: space-between; /* Выравниваем элементы по краям */
+    align-items: center; /* Выравниваем по вертикали */
     width: 100%; /* Первое textarea занимает всю ширину */
     padding: 10px;
     box-sizing: border-box; /* Учитывает padding в ширине */
     width: 100%; /* Ширина текстового поля */
 }
+
+.textarea-first img {
+    width: 35px;
+    border-radius: 50%;
+    margin-right: 10px; 
+}
+
 .textarea-first textarea{
     width: 100%; /* Ширина текстового поля */
     padding: 10px;
@@ -388,7 +398,7 @@ a{
     flex-grow: 1; /* Второе textarea занимает всё доступное пространство */
     padding: 10px;
     box-sizing: border-box;
-    margin-right: 5px; /* Отступ для кнопки */
+    margin-right: 3px; /* Отступ для кнопки */
 }
 
 .textarea-second textarea{
@@ -412,6 +422,7 @@ a{
 
 .submit-button {
     margin-top: -5px;
+    margin-right: 10px;
     background-color: #1da1f2;
     color: white;
     border: none;
@@ -436,11 +447,7 @@ a{
 }
 
 
-.create-post-input img{
-    width: 35px;
-    border-radius: 50%;
-    margin-right: 10px; 
-}
+
 
 ::placeholder{
     font-weight: 500;
