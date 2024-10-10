@@ -3,11 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import context
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from users.models import Follow
 from blog.models import Tweet
 from django.http import JsonResponse  
+import json
 
+from blog.models import Like
 
 
 class Settings_view(ListView):
@@ -34,18 +37,17 @@ class Home_list_view(ListView):
         users.append(self.request.user)
         for i in data['object_list']:
             users.append(i.follow_user)
-
         try:
             tweets = Tweet.objects.filter(author__in=users).order_by('-date_posted')
-            print(tweets)
             data['flag_posts'] = True
             data['tweets'] = tweets
+            liked_tweet_ids = Like.objects.filter(user=self.request.user).values_list('tweet_id', flat=True)
+            data['liked_tweet_ids'] = list(liked_tweet_ids)
         except:
             data['flag_posts'] = False
 
         data['user'] = self.request.user
         data['object_list'] = data['object_list'][:6]
-        print(data['flag_posts'])
         return data
 
 class Profile_list_view(ListView):
@@ -61,7 +63,8 @@ class Profile_list_view(ListView):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         try:
             tweets = Tweet.objects.filter(author=user).order_by('-date_posted')
-            print(tweets)
+            liked_tweet_ids = Like.objects.filter(user=self.request.user).values_list('tweet_id', flat=True)
+            data['liked_tweet_ids'] = list(liked_tweet_ids)
             data['flag_posts'] = True
             data['tweets'] = tweets
         except:
@@ -69,6 +72,9 @@ class Profile_list_view(ListView):
             data['flag_posts'] = False
         data['user'] = user
         data['auth_user'] = self.request.user
+        data['flag_track'] = True
+        if(data['user'] == data['auth_user'] or data['object_list'].filter(user=data['auth_user']).exists()):
+            data['flag_track'] = False
         return data
 
 
@@ -77,12 +83,9 @@ def tweet_view(request):
         try:
             author = request.user
             content = request.POST.get('content')  # Используем get для безопасного доступа
-            
-            # Проверяем, что содержимое не пустое
             if content:
                 tweet = Tweet.objects.create(author=author, content=content)
                 tweet.save()
-
                 # Формируем данные для ответа
                 response_data = {
                     'id': tweet.id,
@@ -115,3 +118,24 @@ def tweet_detail(request, tweet_id):
             'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
         }
         return JsonResponse(data)
+
+
+@require_POST
+def like_tweet(request, tweet_id):
+    data = json.loads(request.body)
+    liked = data.get('liked')
+    tweet = Tweet.objects.get(id=tweet_id)
+    if liked:
+        like, created = Like.objects.get_or_create(user=request.user, tweet=tweet)
+        if created:
+            tweet.likes += 1
+            tweet.save()
+            return JsonResponse({'liked': True})
+        else:
+            return JsonResponse({'liked': True})
+    else:
+        if Like.objects.filter(user=request.user, tweet=tweet).exists():
+            Like.objects.filter(user=request.user, tweet=tweet).delete()
+            tweet.likes -= 1
+            tweet.save()
+        return JsonResponse({'liked': False})
