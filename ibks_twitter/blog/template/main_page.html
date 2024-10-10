@@ -177,7 +177,7 @@
         $('#submit_button').click(function (e) {
             e.preventDefault(); // Отменяем стандартное поведение формы
 
-            var tweetContent = $('tweet_content').val();  // Получаем содержимое твита
+            var tweetContent = $('#tweet_content').val();  // Получаем содержимое твита
             var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // Получаем CSRF-токен
 
             if (tweetContent.trim() === "") {
