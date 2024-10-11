@@ -11,12 +11,12 @@
 <body>
     <nav class="navbar">
     <div class="navbar-left">
-        <a href="/home/" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <a href="/home/" class="logo"><img src="{% static 'img/start.png' %}"></a>
     </div>
     <div class="navbar-center">
     </div>
     <div class="navbar-right">
-        <img src="{{user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
+        <img src="{{auth_user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
     </div>
     <div class="profile-menu-wrap" id="profileMenu">
         <div class="profile-menu">

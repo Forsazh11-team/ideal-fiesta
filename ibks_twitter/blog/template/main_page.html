@@ -14,11 +14,11 @@
    <nav class="navbar">
     <div class="navbar-left">
         {% load static %}
-        <a href="/home" class="logo"><img src="{% static 'img/start.jpg' %}"></a>
+        <a href="/home" class="logo"><img src="{% static 'img/start.png' %}"></a>
         <form action="{% url 'search_by_hashtag' %}" method="get">
         <div class="searchbox">
 <!--            <img src="{% static 'img/search.png' %}">-->
-            <input type="text" name="tag" placeholder="Enter hashtag">
+            <input type="text" name="tag" placeholder="Поиск по тегам">
             <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
         </div>
         </form>
@@ -49,20 +49,24 @@
    </nav>
    <div class="container">
     <div class="main">
-        <form class="create-post-form" id="post_form" action="/home/tweet" method="POST">
-        <div class="create-post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="create-post-input">
-                   <img src="{{user.image}}">
-                   <textarea id="tweet_content" rows="1" placeholder="Поделитесь чем-нибудь!" oninput="autoResize(this)" required></textarea>
+    <form class="create-post-form" id="post_form" action="/tweet/" method="POST">
+            {% csrf_token %}
+            <div class="create-post">
+             <div class="form-container">
+                <div class="textarea-container">
+                    <div class="textarea-first">
+                        <img src="{{user.profile.image.url}}">
+                        {{ form.content }}
+                    </div>
                 </div>
-              <div class="create-post-links">
-                    <button type="submit" id="submit_button">Поделиться</button>
-             </div>
+                <div class="textarea-container textarea-second-line">
+                    <div class="textarea-second">{{ form.hashtags }}</div>
+                    <button type="submit" class="submit-button">Поделиться</button>
+                </div>
+            </div>
         </div>
-        </form>
-        <a href ="#" onclick="handleClick(event)"><div id="new_tweets"></div></a>
+    </form>
+        <a href ="/tweet" onclick="handleClick(event)"><div id="new_tweets"></div></a>
         {% if flag_posts %}
         {% for tweet in tweets %}
         <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
@@ -80,7 +84,7 @@
                 <div class="post-activity-link">
                     <button id="likeBtn-{{tweet.id}}" class="like-btn" data-liked="{% if tweet.id in liked_tweet_ids %}true{% else %}false{% endif %}" onclick=" likeClick(event, {{tweet.id}})">
                         {% if tweet.id in liked_tweet_ids %}
-                            <i class="fas fa-heart" style="color: #e74c3c;"></i> <!-- Закрашенное сердце -->
+                            <i class="fas fa-heart" style="color: #704c9e;"></i> <!-- Закрашенное сердце -->
                         {% else %}
                             <i class="far fa-heart"></i> <!-- Обведённое сердце -->
                         {% endif %}
@@ -103,7 +107,7 @@
                 </div>
               <!-- Секция для добавления нового комментария -->
                 <div class="comment-item" onclick="childClick(event)">
-                    <img src="{% static 'img/start.jpg' %}">
+                    <img src="{{user.profile.image.url}}">
                     <textarea rows=1 class="comment-input" id="comment-{{tweet.id}}" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
                     <button class="submit-comment" onclick="addComment({{tweet.id}})">Отправить</button>
                 </div>
@@ -290,9 +294,9 @@
         const time = now.toLocaleString();
         var newComment = `<hr class="comment-line">
                     <div class="comment-item">
-                        <img src="{% static 'img/start.jpg' %}">
+                        <img src="{{user.profile.image.url}}">
                         <div class="comment-content">
-                            <strong>user</strong>
+                            <strong>{{user.username}}</strong>
                             <p>${commentInput.trim()}</p>
                             <span class="comment-date">${time}</span>
                         </div>
@@ -328,7 +332,7 @@
         .then(data => {
             if (data.liked) {
                 likeBtn.setAttribute('data-liked', 'true');
-                likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #e74c3c;"></i>'; // Закрашенное сердце
+                likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #704c9e;"></i>'; // Закрашенное сердце
                 likeCountSpan.textContent = parseInt(likeCountSpan.textContent) + 1;
             } else {
                 likeBtn.setAttribute('data-liked', 'false');

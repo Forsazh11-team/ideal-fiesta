@@ -16,14 +16,14 @@ body {
 
 .logo-section {
     flex: 1;
-    background-color: #1da1f2;
+    background-color: #704c9e;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .logo {
-    width: 400px; /* Установите нужный размер логотипа */
+    width: 300px; /* Установите нужный размер логотипа */
     height: auto;
 }
 
@@ -56,7 +56,7 @@ body {
 
 h1 {
     margin-bottom: 20px;
-    color: #1da1f2; /* Цвет заголовка */
+    color: #704c9e; /* Цвет заголовка */
 }
 
 .form-group {
@@ -77,12 +77,13 @@ input {
 }
 
 input:focus {
-    border-color: #1da1f2; /* Цвет рамки при фокусе */
+    border-color: #704c9e;
+    outline: none;
 }
 
 button {
     padding: 10px;
-    background-color: #1da1f2;
+    background-color: #704c9e;
     color: white;
     border: none;
     border-radius: 5px;
@@ -91,7 +92,7 @@ button {
 }
 
 button:hover {
-    background-color: #0d8bca; /* Цвет кнопки при наведении */
+    background-color: #421954; /* Цвет кнопки при наведении */
 }
 
 p {
@@ -99,7 +100,7 @@ p {
 }
 
 a {
-    color: #1da1f2;
+    color: #704c9e;
     text-decoration: none; /* Убираем подчеркивание */
 }
 

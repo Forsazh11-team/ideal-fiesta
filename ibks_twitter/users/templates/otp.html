@@ -14,15 +14,15 @@
         </div>
         <div class="welcome-section">
             <div class="register-container">
-                <h1>Code has been send to your email adress.</h1>
+                <h1>Код для входа был отправлен на указанный электронный адрес.</h1>
                 <form method="POST" id="code-form">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="id_code">Enter the code:</label>
+                        <label for="id_code">Введите код:</label>
                         <input type="text" id="id_code" name="Code" required>
                     </div>
-                    <button type="submit">Submit</button>
-                    <p><a href="/login">Return to login page</a></p>
+                    <button type="submit">Подтвердить</button>
+                    <p><a href="/login">Вернутся ко входу</a></p>
                 </form>
                 <div class="messages">
                     {% if error %}

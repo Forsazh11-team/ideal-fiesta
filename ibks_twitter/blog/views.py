@@ -88,7 +88,6 @@ def create_tweet(request):
             for tag in hashtags_list:
                 hashtag, created = Hashtag.objects.get_or_create(text=tag)
                 tweet.hashtags.add(hashtag)
-
             response_data = {
                 'id': tweet.id,
                 'author_username': tweet.author.username,
@@ -174,5 +173,3 @@ class Search_view(ListView):
         data['user'] = self.request.user
         data['object_list'] = data['object_list'][:6]
         return data
-
-
