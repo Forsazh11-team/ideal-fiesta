@@ -174,3 +174,5 @@ class Search_view(ListView):
         data['user'] = self.request.user
         data['object_list'] = data['object_list'][:6]
         return data
+
+
