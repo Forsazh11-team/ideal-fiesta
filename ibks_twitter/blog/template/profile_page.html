@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {% load static %}
-    <title>Профиль</title>
+    <title>Профиль {{user.username}}</title>
     <link rel="stylesheet"  href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -30,7 +30,7 @@
     <div class="profile-menu-wrap" id="profileMenu">
         <div class="profile-menu">
             <div class="user-info">
-                <img src="{{user.profile.image.url}}" alt="">
+                <img src="{{auth_user.profile.image.url}}" alt="">
                 <div>
                     <h3><a href="/profile/{{auth_user.username}}" class="profile-menu-links">{{auth_user.username}}</a></h3>
                 </div>
@@ -116,7 +116,7 @@
                 </div>
               <!-- Секция для добавления нового комментария -->
                 <div class="comment-item" onclick="childClick(event)">
-                    <img src="{{user.profile.image.url}}">
+                    <img src="{{auth_user.profile.image.url}}">
                     <textarea rows=1 class="comment-input" id="comment-{{tweet.id}}" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
                     <button class="submit-comment" onclick="addComment({{tweet.id}})">Отправить</button>
                 </div>
