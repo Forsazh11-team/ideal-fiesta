@@ -208,32 +208,15 @@ class Search_view(ListView):
         return data
 
 
-class Comment_view(ListView):
-    model = Tweet
-    template_name = 'search_result_page.html'
-
-    def get_queryset(self):
-        user = self.request.user
-        return Follow.objects.filter(user=user)
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        data = super().get_context_data(**kwargs)
-        users = []
-        users.append(self.request.user)
-        for i in data['object_list']:
-            users.append(i.follow_user)
-        try:
-            query = self.request.GET.get('tag')
-            hashtag = Hashtag.objects.get(text=query)
-            print(hashtag)
-            tweets = hashtag.tweets.all().order_by('-date_posted')
-            print(tweets)
-            data['flag_posts'] = True
-            data['tweets'] = tweets
-            liked_tweet_ids = Like.objects.filter(user=self.request.user).values_list('tweet_id', flat=True)
-            data['liked_tweet_ids'] = list(liked_tweet_ids)
-        except:
-            data['flag_posts'] = False
-        data['user'] = self.request.user
-        data['object_list'] = data['object_list'][:6]
-        return data
+def comment_view(request, tweet_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        content = data.get('content')
+        tweet = Tweet.objects.get(id=tweet_id)
+        comment, created = Comment.objects.get_or_create(author=request.user, content=content, tweet=tweet)
+        if created:
+            return JsonResponse({'success': True})
+    if request.method == 'PUT':
+        pass
+    if request.method == 'DELETE':
+        pass

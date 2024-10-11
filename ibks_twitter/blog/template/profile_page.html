@@ -103,17 +103,17 @@
             </div>
             <div class="comment-section" onclick="childClick(event)">
                  <!-- Список комментариев -->
-                <div id="comment-list-{{tweet.id}}">
-                    <hr class="comment-line">
-                    <div class="comment-item">
-                        <img src="{% static 'img/start.jpg' %}">
-                        <div class="comment-content">
-                            <strong>user</strong>
-                            <p>comment</p>
-                            <span class="comment-date">09 октября 2024</span>
-                        </div>
-                    </div>
-                </div>
+<!--                <div id="comment-list-{{tweet.id}}">-->
+<!--                    <hr class="comment-line">-->
+<!--                    <div class="comment-item">-->
+<!--                        <img src="{% static 'img/start.jpg' %}">-->
+<!--                        <div class="comment-content">-->
+<!--                            <strong>user</strong>-->
+<!--                            <p>comment</p>-->
+<!--                            <span class="comment-date">09 октября 2024</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
               <!-- Секция для добавления нового комментария -->
                 <div class="comment-item" onclick="childClick(event)">
                     <img src="{{user.profile.image.url}}">
@@ -201,19 +201,21 @@
             alert("Комментарий не может быть пустым");
             return;
         }
-        const now = new Date();
-        const time = now.toLocaleString();
-        var newComment = `<hr class="comment-line">
-                    <div class="comment-item">
-                        <img src="{{user.profile.image.url}}">
-                        <div class="comment-content">
-                            <strong>{{user.username}}</strong>
-                            <p>${commentInput.trim()}</p>
-                            <span class="comment-date">${time}</span>
-                        </div>
-                    </div>`
-        $(`#comment-list-${tweetId}`).append(newComment);
-        $(`#comment-${tweetId}`).val('');
+
+        fetch(`/comment/${tweetId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({ content: commentInput }) // Отправляем коммент
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            location.reload();
+        })
     }
 
     function likeClick(event, tweetId) {
