@@ -31,6 +31,7 @@ urlpatterns = [
     path('tweet/<int:tweet_id>/', tweet_detail, name='tweet_detail'),  # Для AJAX запроса
     path('settings/', Settings_view.as_view()),
     path('settings/update', blog_views.settings_update),
+    path('settings/pass/update', blog_views.password_update),
     path('like/<int:tweet_id>/', blog_views.like_tweet, name='like_tweet'),
     path('search/', Search_view.as_view(), name='search_by_hashtag'),
     path('comment/<int:tweet_id>/', blog_views.comment_view, name='create_cooment')

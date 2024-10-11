@@ -1,12 +1,15 @@
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-from users.models import Follow
+from users.models import Follow, Profile
 from blog.models import Tweet, Like, Hashtag, Comment
-from django.http import JsonResponse, request
+from django.http import JsonResponse, request, HttpResponse
 import json
-from blog.forms import TweetForm
+from blog.forms import TweetForm, CustomPasswordChangeForm
+
 
 
 class Settings_view(ListView):
@@ -22,6 +25,7 @@ class Settings_view(ListView):
         data['location'] = data['profile_list'][0].location
         data['about'] = data['profile_list'][0].about
         data['auth_user'] = self.request.user
+        data['form'] = CustomPasswordChangeForm(self.request.user)
         return data
 
 def settings_update(request):
@@ -220,3 +224,19 @@ def comment_view(request, tweet_id):
         pass
     if request.method == 'DELETE':
         pass
+
+
+def password_update(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Чтобы не разлогинивать пользователя
+            return HttpResponse("Success") # Переход на страницу профиля или другую
+        else:
+            qwe = ""
+            for error in form.errors.values():
+                qwe += str(error)
+            return HttpResponse(qwe)
+    else:
+        return HttpResponse("non post")

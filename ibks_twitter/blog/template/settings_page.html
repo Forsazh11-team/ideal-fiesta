@@ -63,13 +63,15 @@
             </form>
 
             <h2 id="security">Безопасность</h2>
-            <form id="password-settings">
-                <label for="current-password">Текущий пароль</label>
-                <input type="password" id="current-password" name="current-password" placeholder="Введите текущий пароль" required>
-                <label for="new-password">Новый пароль</label>
-                <input type="password" id="new-password" name="new-password" placeholder="Введите новый пароль" required>
-                <label for="confirm-password">Подтвердите новый пароль</label>
-                <input type="password" id="confirm-password" name="confirm-password" placeholder="Подтвердите новый пароль" required>
+            <form action="/settings/pass/update" method="POST" id="password-settings">
+                {% csrf_token %}
+                {{form.as_p}}
+<!--                <label for="current-password">Текущий пароль</label>-->
+<!--                <input type="password" id="current-password" name="current-password" placeholder="Введите текущий пароль" required>-->
+<!--                <label for="new-password">Новый пароль</label>-->
+<!--                <input type="password" id="new-password" name="new-password" placeholder="Введите новый пароль" required>-->
+<!--                <label for="confirm-password">Подтвердите новый пароль</label>-->
+<!--                <input type="password" id="confirm-password" name="confirm-password" placeholder="Подтвердите новый пароль" required>-->
                 <button type="submit">Изменить пароль</button>
             </form>
         </div>
