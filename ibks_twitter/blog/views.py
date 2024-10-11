@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from users.models import Follow
-from blog.models import Tweet, Like, Hashtag
+from blog.models import Tweet, Like, Hashtag, Comment
 from django.http import JsonResponse, request
 import json
 from blog.forms import TweetForm
@@ -110,11 +110,13 @@ def create_tweet(request):
 def tweet_detail(request, tweet_id):
     if request.method == 'GET':
         tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
+        comments = list(Comment.objects.filter(tweet=tweet))
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
             data = {
                 'author': tweet.author.username,
                 'content': tweet.content,
                 'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
+                'comments': comments,
             }
             return JsonResponse(data)
     if request.method == 'PUT':
@@ -145,6 +147,37 @@ def like_tweet(request, tweet_id):
 
 
 class Search_view(ListView):
+    model = Tweet
+    template_name = 'search_result_page.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        return Follow.objects.filter(user=user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        data = super().get_context_data(**kwargs)
+        users = []
+        users.append(self.request.user)
+        for i in data['object_list']:
+            users.append(i.follow_user)
+        try:
+            query = self.request.GET.get('tag')
+            hashtag = Hashtag.objects.get(text=query)
+            print(hashtag)
+            tweets = hashtag.tweets.all().order_by('-date_posted')
+            print(tweets)
+            data['flag_posts'] = True
+            data['tweets'] = tweets
+            liked_tweet_ids = Like.objects.filter(user=self.request.user).values_list('tweet_id', flat=True)
+            data['liked_tweet_ids'] = list(liked_tweet_ids)
+        except:
+            data['flag_posts'] = False
+        data['user'] = self.request.user
+        data['object_list'] = data['object_list'][:6]
+        return data
+
+
+class Comment_view(ListView):
     model = Tweet
     template_name = 'search_result_page.html'
 
