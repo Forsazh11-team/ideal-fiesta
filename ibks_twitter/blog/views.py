@@ -115,6 +115,7 @@ def tweet_detail(request, tweet_id):
                 'author': tweet.author.username,
                 'content': tweet.content,
                 'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
+                'img': tweet.author.profile.image.url,
             }
             return JsonResponse(data)
     if request.method == 'PUT':

@@ -121,7 +121,7 @@
                     {% for user in object_list %}
                     <li class="subscription-item">
                        <button onclick="location.href='/profile/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
-                        <img style="width: 20px; height: 20px;" src="{{ user.follow_user.profile.image.url }}">
+                        <img src="{{ user.follow_user.profile.image.url }}">
                         <span>{{ user.follow_user.username }}</span>
                         </button>
                     </li>
@@ -134,7 +134,10 @@
     <div id="tweetModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modal-author"></h2>
+            <div class="modal-header">
+                 <img id="modal-img">
+                 <h2 id="modal-author"></h2>
+            </div>
             <p id="modal-content"></p>
             <small id="modal-date"></small>
             <div class="post-activity">
@@ -251,6 +254,7 @@
             document.getElementById('modal-author').textContent = data.author;
             document.getElementById('modal-content').textContent = data.content;
             document.getElementById('modal-date').textContent = data.date_posted;
+            document.getElementById('modal-img').src = data.img;
 
             // Отображение модального окна
             document.getElementById('tweetModal').style.display = 'block';
