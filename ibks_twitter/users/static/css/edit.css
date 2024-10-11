@@ -46,7 +46,7 @@ h2 {
 }
 
 .content input:focus {
-    border-color: #1da1f2; /* Цвет рамки при фокусе */
+    border-color: #704c9e; /* Цвет рамки при фокусе */
     outline: none; /* Убираем стандартное выделение */
 }
 
@@ -70,7 +70,7 @@ h2 {
 
 .sidebar ul li a {
     text-decoration: none;
-    color: #1da1f2;
+    color: #704c9e;
     font-weight: bold;
 }
 
@@ -99,7 +99,7 @@ input[type="checkbox"] {
 
 button {
     padding: 12px 20px;
-    background-color: #1da1f2;
+    background-color: #704c9e;
     color: white;
     border: none;
     border-radius: 5px;
@@ -109,7 +109,7 @@ button {
 }
 
 button:hover {
-    background-color: #0d95e8;
+    background-color: #421954;
 }
 
 .image-preview {

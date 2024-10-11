@@ -64,7 +64,7 @@ a{
     content: '';
     width: 0;
     height: 2px;
-    background-color: #1da1f2;
+    background-color: #704c9e;
     position: absolute;
     bottom:-15px;
     transition: width 0.3s;
@@ -158,7 +158,7 @@ a{
 
 /* Кнопка поиска */
 .search-button {
-    background-color: #1da1f2; /* Синий цвет фона */
+    background-color: #704c9e;
     border: none;
     padding: 10px 10px; /* Внутренние отступы для кнопки */
     cursor: pointer;
@@ -178,7 +178,7 @@ a{
 
 /* Эффект наведения на кнопку */
 .search-button:hover {
-    background-color: #0d8dd3; /* Темно-синий цвет при наведении */
+    background-color: #421954; /* Темно-синий цвет при наведении */
 }
 
 .navbar-left{
@@ -217,7 +217,7 @@ a{
 
 .sidebar-profilebox{
     margin-top: 10px;
-    background: #1da1f2;
+    background: #704c9e;
     border-radius: 10px; /* Закругление углов кнопки */
 }
 
@@ -378,7 +378,7 @@ a{
 }
 
 .textarea-first textarea:focus {
-    border-color: #1da1f2;
+    border-color: #704c9e;
     outline: none;
 }
 
@@ -412,7 +412,7 @@ a{
 }
 
 .textarea-second textarea:focus {
-    border-color: #1da1f2;
+    border-color: #704c9e;
     outline: none;
 }
 
@@ -423,7 +423,7 @@ a{
 .submit-button {
     margin-top: -5px;
     margin-right: 10px;
-    background-color: #1da1f2;
+    background-color: #704c9e;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -433,7 +433,7 @@ a{
 }
 
 .submit-button:hover {
-    background-color: #0d8dd3;
+    background-color: #421954;
 }
 
 .create-post {
@@ -626,7 +626,7 @@ a{
 }
 
 .comment-item textarea:focus {
-    border-color: #1da1f2; /* Цвет рамки при фокусе */
+    border-color: #704c9e; /* Цвет рамки при фокусе */
     outline: none; /* Убираем стандартное выделение */
 }
 
@@ -654,7 +654,7 @@ a{
 }
 
 .comment-item button {
-    background-color: #1da1f2; /* Цвет фона кнопки */
+    background-color: #704c9e; /* Цвет фона кнопки */
     color: white; /* Цвет текста кнопки */
     padding: 10px 15px; /* Внутренние отступы кнопки */
     border-radius: 4px; /* Закругление углов кнопки */
@@ -665,7 +665,7 @@ a{
 }
 
 .comment-item button:hover {
-    background-color: #0d8dd3; /* Цвет фона кнопки при наведении */
+    background-color: #421954; /* Цвет фона кнопки при наведении */
 }
 
 .comment-item button:focus {
@@ -692,7 +692,7 @@ a{
 .profile-menu{
     border-radius: 20px;
     background-color: #ffffff;
-    border: 2px solid #1da1f2;
+    border: 2px solid #704c9e;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Добавляем тень */
     padding: 10px;
     margin: 10px;
@@ -800,7 +800,7 @@ a{
 }
 
 .profile-background {
-    background-color: #1da1f2; /* Background image for the profile */
+    background-color: #704c9e; /* Background image for the profile */
     background-size: cover; /* Cover the entire background area */
     height: 100px; /* Increased height of the background area */
     border-radius: 8px 8px 0 0; /* Rounded corners on top */
@@ -878,7 +878,7 @@ a{
 
 
 .stats-panel button {
-    background-color: #1da1f2; /* Цвет фона кнопки */
+    background-color: #704c9e; /* Цвет фона кнопки */
     color: white; /* Цвет текста кнопки */
     padding: 10px 15px; /* Внутренние отступы кнопки */
     border-radius: 4px; /* Закругление углов кнопки */
@@ -891,7 +891,7 @@ a{
 }
 
 .stats-panel button:hover {
-    background-color: #0d8dd3; /* Цвет фона кнопки при наведении */
+    background-color: #421954; /* Цвет фона кнопки при наведении */
 }
 
 .stats-panel button:focus {
