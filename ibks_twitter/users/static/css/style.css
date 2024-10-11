@@ -282,7 +282,7 @@ a{
     position: fixed;
     right: 20px; /* Добавляем отступ справа */
     top: 78px;
-    width: 300px; /* Увеличиваем ширину панели */
+    width: 100vh; /* Увеличиваем ширину панели */
     border-radius: 8px;    
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -309,6 +309,19 @@ a{
     align-items: center;
     padding: 10px 0;
     border-bottom: 1px solid #e0e0e0;
+}
+
+.subscription-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.subscription-item span {
+    font-size: 14px;
+    font-weight: 500;
+
 }
 
 .subscription-item:last-child {
@@ -444,9 +457,8 @@ a{
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: relative; /* Для абсолютного позиционирования кнопки */
+    margin-bottom: 15px;
 }
-
-
 
 
 ::placeholder{
@@ -456,14 +468,15 @@ a{
 
 .post{
     cursor: pointer;
-    max-width: 850px; /* Ограничьте максимальную ширину поста */
-    width: auto; /* Позволяет ширине автоматически подстраиваться */
+    width: 100%; /* Позволяет ширине автоматически подстраиваться */
     background: #fff;
     border-radius: 10px; /* Закругление углов */
     padding: 20px 25px 5px;
     margin: 5px 0 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+
 
 
 .post-author{
@@ -906,7 +919,6 @@ a{
     position: fixed; /* Окно фиксируется относительно окна браузера */
     z-index: 1000; /* Убедитесь, что модальное окно выше других элементов */
     left: 0;
-    top: 0;
     width: 100%; /* Полная ширина */
     height: 100%; /* Полная высота */
     overflow: auto; /* Добавляет прокрутку, если необходимо */
@@ -921,6 +933,19 @@ a{
     width: 80%; /* Ширина модального окна */
     max-width: 600px; /* Максимальная ширина */
     border-radius: 10px; /* Закругленные углы */
+}
+
+.modal-header{
+    display: flex;
+
+
+}
+.modal-header img {
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-top: -5px;
 }
 
 
