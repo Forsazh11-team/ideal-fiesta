@@ -138,17 +138,19 @@
                  <img id="modal-img">
                  <h2 id="modal-author"></h2>
             </div>
+            <h2 id="modal-author"></h2>
             <p id="modal-content"></p>
             <small id="modal-date"></small>
             <div class="post-activity">
                 <div class="post-activity-link">
-                    <button id="likeBtn-{{tweet.id}}" class="like-btn" data-liked="false" onclick=" likeClick(event, {{tweet.id}})">
+                    <button id="modal-likeBtn" class="like-btn" data-liked="false">
                         <i class="far fa-heart"></i>
                     </button>
-                    <span>{{tweet.likes}}</span>
+                    <span>2</span>
                 </div>
             </div>
-        </div>
+            <div id="modal-comments"></div>
+    </div>
     </div>
 <script>
     let profileMenu = document.getElementById("profileMenu");
@@ -245,17 +247,31 @@
         });
     });
 
-    function openModal(tweetId) {
+     function openModal(tweetId) {
         $.ajax({
         url: `/tweet/${tweetId}/`,
         type: 'GET',
         success: function(data) {
+
             // Заполнение модального окна данными твита
             document.getElementById('modal-author').textContent = data.author;
             document.getElementById('modal-content').textContent = data.content;
             document.getElementById('modal-date').textContent = data.date_posted;
             document.getElementById('modal-img').src = data.img;
-
+            $('#modal-comments').empty()
+            data.comments.forEach(comment => {
+                var newComment = `<hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="${comment.img}">
+                        <div class="comment-content">
+                            <strong>${comment.author}</strong>
+                            <p>${comment.content}</p>
+                            <span class="comment-date">${comment.date_posted}</span>
+                        </div>
+                    </div>`
+                
+                $('#modal-comments').append(newComment);
+            });;
             // Отображение модального окна
             document.getElementById('tweetModal').style.display = 'block';
         },

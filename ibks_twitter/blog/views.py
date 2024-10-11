@@ -7,6 +7,7 @@ from blog.models import Tweet, Like, Hashtag, Comment
 from django.http import JsonResponse, request
 import json
 from blog.forms import TweetForm
+from django.core import serializers
 
 
 class Settings_view(ListView):
@@ -110,17 +111,25 @@ def create_tweet(request):
 def tweet_detail(request, tweet_id):
     if request.method == 'GET':
         tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
-        comments = list(Comment.objects.filter(tweet=tweet))
+        comments = Comment.objects.filter(tweet=tweet)
+        send_commends = []
+        for com in comments:
+            send_commends.append({
+                'tweet': tweet_id,
+                'author': com.author.username,
+                'content' : com.content,
+                'date_posted': com.date_posted,
+                'img':com.author.profile.image.url,
+                # Добавьте другие поля по необходимости
+            })
+        print(send_commends)
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
             data = {
                 'author': tweet.author.username,
                 'content': tweet.content,
                 'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
-<<<<<<< HEAD
                 'img': tweet.author.profile.image.url,
-=======
-                'comments': comments,
->>>>>>> 28669cee4f6eaf241da9e25e40807e192208de93
+                'comments': send_commends,
             }
             return JsonResponse(data)
     if request.method == 'PUT':

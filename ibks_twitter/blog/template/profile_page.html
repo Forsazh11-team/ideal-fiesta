@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {% load static %}
-    <title>Профиль {{user.username}}</title>
+    <title>Профиль</title>
     <link rel="stylesheet"  href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -30,7 +30,7 @@
     <div class="profile-menu-wrap" id="profileMenu">
         <div class="profile-menu">
             <div class="user-info">
-                <img src="{{auth_user.profile.image.url}}" alt="">
+                <img src="{{user.profile.image.url}}" alt="">
                 <div>
                     <h3><a href="/profile/{{auth_user.username}}" class="profile-menu-links">{{auth_user.username}}</a></h3>
                 </div>
@@ -116,7 +116,7 @@
                 </div>
               <!-- Секция для добавления нового комментария -->
                 <div class="comment-item" onclick="childClick(event)">
-                    <img src="{{auth_user.profile.image.url}}">
+                    <img src="{{user.profile.image.url}}">
                     <textarea rows=1 class="comment-input" id="comment-{{tweet.id}}" placeholder="Напишите ваш комментарий..." oninput="autoResize(this)" required></textarea>
                     <button class="submit-comment" onclick="addComment({{tweet.id}})">Отправить</button>
                 </div>
@@ -132,7 +132,7 @@
                     {% for user in object_list %}
                     <li class="subscription-item">
                        <button onclick="location.href='/profile/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
-                        <img src="{{ user.follow_user.profile.image.url }}">
+                        <img style="width: 20px; height: 20px;" src="{{ user.follow_user.profile.image.url }}">
                         <span>{{ user.follow_user.username }}</span>
                         </button>
                     </li>
@@ -145,10 +145,6 @@
     <div id="tweetModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <div class="modal-header">
-                 <img id="modal-img">
-                 <h2 id="modal-author"></h2>
-            </div>
             <h2 id="modal-author"></h2>
             <p id="modal-content"></p>
             <small id="modal-date"></small>
@@ -191,8 +187,7 @@
             document.getElementById('modal-author').textContent = data.author;
             document.getElementById('modal-content').textContent = data.content;
             document.getElementById('modal-date').textContent = data.date_posted;
-            document.getElementById('modal-img').src = data.img;
-;
+
             // Отображение модального окна
             document.getElementById('tweetModal').style.display = 'block';
         },
