@@ -145,11 +145,24 @@
     <div id="tweetModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                 <img id="modal-img">
+                 <h2 id="modal-author"></h2>
+            </div>
             <h2 id="modal-author"></h2>
             <p id="modal-content"></p>
             <small id="modal-date"></small>
+            <div class="post-activity">
+                <div class="post-activity-link">
+                    <button id="modal-likeBtn" class="like-btn" data-liked="false">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <span>2</span>
+                </div>
+            </div>
+            <div id="modal-comments"></div>
         </div>
-    </div>
+    </div>>
 <script>
     let profileMenu = document.getElementById("profileMenu");
     function toggleMenu(){
@@ -176,37 +189,6 @@
     function autoResize(textarea) {
         textarea.style.height = 'auto'; // Сбрасываем высоту
         textarea.style.height = textarea.scrollHeight + 'px'; // Устанавливаем новую высоту
-    }
-
-    function openModal(tweetId) {
-        $.ajax({
-        url: `/tweet/${tweetId}/`,
-        type: 'GET',
-        success: function(data) {
-            // Заполнение модального окна данными твита
-            document.getElementById('modal-author').textContent = data.author;
-            document.getElementById('modal-content').textContent = data.content;
-            document.getElementById('modal-date').textContent = data.date_posted;
-
-            // Отображение модального окна
-            document.getElementById('tweetModal').style.display = 'block';
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    });
-    }
-    function closeModal() {
-        const modal = document.getElementById("tweetModal");
-        modal.style.display = "none";  // Скрываем модальное окно
-    }
-
-    // Закрытие модального окна при клике вне его содержимого
-    window.onclick = function(event) {
-        const modal = document.getElementById("tweetModal");
-        if (event.target === modal) {
-            closeModal();
-        }
     }
 
     function childClick(event) {
@@ -284,6 +266,64 @@
     }
     return cookieValue;
 }
+
+
+    function openModal(tweetId) {
+       $.ajax({
+        url: `/tweet/${tweetId}/`,
+        type: 'GET',
+        success: function(data) {
+
+            // Заполнение модального окна данными твита
+            document.getElementById('modal-author').textContent = data.author;
+            document.getElementById('modal-content').textContent = data.content;
+            document.getElementById('modal-date').textContent = data.date_posted;
+            document.getElementById('modal-img').src = data.img;
+            $('#modal-comments').empty()
+            data.comments.forEach(comment => {
+                var newComment = `<hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="${comment.img}">
+                        <div class="comment-content">
+                            <strong>${comment.author}</strong>
+                            <p>${comment.content}</p>
+                            <span class="comment-date">${comment.date_posted}</span>
+                        </div>
+                    </div>`
+
+                $('#modal-comments').append(newComment);
+            });;
+            // Отображение модального окна
+            document.getElementById('tweetModal').style.display = 'block';
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    });
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("tweetModal");
+        modal.style.display = "none";  // Скрываем модальное окно
+    }
+
+    // Закрытие модального окна при клике вне его содержимого
+    window.onclick = function(event) {
+        const modal = document.getElementById("tweetModal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+
+
+    $(document).ready(function() {
+    // Устанавливаем обработчик события клика на все твиты
+        $('#new_tweets').on('click', '.post', function() {
+            var tweetId = $(this).attr('data-post-id');
+            openModal(tweetId)
+        });
+    });
 
 </script>
 </body>

@@ -68,7 +68,7 @@
         <a href ="/tweet" onclick="handleClick(event)"><div id="new_tweets"></div></a>
         {% if flag_posts %}
         {% for tweet in tweets %}
-        <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
+        <div class="post" data-post-id="{{ tweet.id }}" onclick="openModale({{ tweet.id }});">
             <div class="post-author">
                 <img src=" {{ tweet.author.profile.image.url }}">
                 <div>
@@ -150,7 +150,7 @@
                 </div>
             </div>
             <div id="modal-comments"></div>
-    </div>
+        </div>
     </div>
 <script>
     let profileMenu = document.getElementById("profileMenu");
@@ -247,7 +247,7 @@
         });
     });
 
-     function openModal(tweetId) {
+     function openModale(tweetId) {
         $.ajax({
         url: `/tweet/${tweetId}/`,
         type: 'GET',

@@ -11,13 +11,35 @@ from blog.forms import TweetForm
 
 class Settings_view(ListView):
     template_name = 'settings_page.html'
+
     def get_queryset(self):
         user = self.request.user
-        return Follow.objects.filter(user=user)
+        return Profile.objects.filter(user=user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         data = super().get_context_data(**kwargs)
+        data['email'] = data['profile_list'][0].user.email
+        data['location'] = data['profile_list'][0].location
+        data['about'] = data['profile_list'][0].about
+        data['auth_user'] = self.request.user
         return data
+
+def settings_update(request):
+    if request.method == 'POST':
+        profile = get_object_or_404(Profile, user=request.user)
+        image = request.FILES.get('profile-image')
+        print(type(image))
+        if image:
+            profile.set_image(image)
+        about = request.POST.get('about')
+        if about:
+            profile.set_about(about)
+        location = request.POST.get('location')
+        if location:
+            profile.set_location(location)
+        profile.save()
+
+    return redirect('/settings')
 
 
 class Home_list_view(ListView):
@@ -80,7 +102,6 @@ def create_tweet(request):
     if request.method == 'POST':
         form = TweetForm(request.POST)
         if form.is_valid():
-            print("FORM VALID")
             tweet = form.save(commit=False)
             tweet.author = request.user
             tweet.save()
@@ -110,13 +131,23 @@ def create_tweet(request):
 def tweet_detail(request, tweet_id):
     if request.method == 'GET':
         tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
-        comments = list(Comment.objects.filter(tweet=tweet))
+        comments = Comment.objects.filter(tweet=tweet)
+        send_commends = []
+        for com in comments:
+            send_commends.append({
+                'tweet': tweet_id,
+                'author': com.author.username,
+                'content' : com.content,
+                'date_posted': com.date_posted,
+                'img':com.author.profile.image.url,
+            })
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
             data = {
                 'author': tweet.author.username,
                 'content': tweet.content,
                 'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
-                'comments': comments,
+                'img': tweet.author.profile.image.url,
+                'comments': send_commends,
             }
             return JsonResponse(data)
     if request.method == 'PUT':
