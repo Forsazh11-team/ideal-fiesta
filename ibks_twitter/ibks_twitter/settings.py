@@ -15,15 +15,23 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$**c(5yrx07%6=i1nv^v#1@w%6g68^w=q&uqr(*%s5y+hjk95m'
+from dotenv import load_dotenv
+SECRET_PATH = os.path.join(BASE_DIR, 'prod.env')
+_ = load_dotenv(SECRET_PATH)
+
+# 'django-insecure-$**c(5yrx07%6=i1nv^v#1@w%6g68^w=q&uqr(*%s5y+hjk95m'
+# This gets django's secret key loaded from secret.env file in production. If
+# this env var does not exist, then the default will be used (for development)
+# REMEMBER TO USE SERVER ONLY KEY FOR PRODUCTION ON THE SERVER!!
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-$**c(5yrx07%6=i1nv^v#1@w%6g68^w=q&uqr(*%s5y+hjk95m')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Set DJANGO_DEBUG=False in prod.env file to disable debug
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = []
 
@@ -127,6 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = '/var/www/ibks_twitter/static'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'users/static'), os.path.join(BASE_DIR, 'blog/static')]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
