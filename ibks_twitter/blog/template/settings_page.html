@@ -23,7 +23,7 @@
             <div class="user-info">
                 <img src="{{user.profile.image.url}}" alt="">
                 <div>
-                    <h3><a href="/{{user.username}}" class="profile-menu-links">{{user.username}}</a></h3>
+                    <h3><a href="/profile/{{user.username}}" class="profile-menu-links">{{user.username}}</a></h3>
                 </div>
             </div>
             <a href="/home" class="profile-menu-links">
@@ -48,33 +48,30 @@
 
         <div class="content">
             <h2 id="personal-info">Личные данные</h2>
-            <form id="profile-settings">
+            <form action="/settings/update" method="POST" id="profile-settings" enctype="multipart/form-data">
+                {% csrf_token %}
                 <label for="profile-image">Фото профиля</label>
                 <input type="file" id="profile-image" name="profile-image" accept="image/*" onchange="previewImage(event)">
                 <div class="image-preview">
                     <img id="preview" src="#" alt="Предварительный просмотр" />
                 </div>
-
-                <label for="username">Имя пользователя</label>
-                <input type="text" id="username" name="username" placeholder="Введите имя пользователя" required>
-
-                <label for="email">Электронная почта</label>
-                <input type="email" id="email" name="email" placeholder="Введите вашу почту" required>
-
+                <label for="location">Страна</label>
+                <input type="location" id="location" name="location" value="{{location}}" required>
+                <label for="about">О себе</label>
+                <input type="about" id="about" name="about" value="{{about}}" required>
                 <button type="submit">Сохранить изменения</button>
             </form>
 
             <h2 id="security">Безопасность</h2>
-            <form id="password-settings">
-                <label for="current-password">Текущий пароль</label>
-                <input type="password" id="current-password" name="current-password" placeholder="Введите текущий пароль" required>
-
-                <label for="new-password">Новый пароль</label>
-                <input type="password" id="new-password" name="new-password" placeholder="Введите новый пароль" required>
-
-                <label for="confirm-password">Подтвердите новый пароль</label>
-                <input type="password" id="confirm-password" name="confirm-password" placeholder="Подтвердите новый пароль" required>
-
+            <form action="/settings/pass/update" method="POST" id="password-settings">
+                {% csrf_token %}
+                {{form.as_p}}
+<!--                <label for="current-password">Текущий пароль</label>-->
+<!--                <input type="password" id="current-password" name="current-password" placeholder="Введите текущий пароль" required>-->
+<!--                <label for="new-password">Новый пароль</label>-->
+<!--                <input type="password" id="new-password" name="new-password" placeholder="Введите новый пароль" required>-->
+<!--                <label for="confirm-password">Подтвердите новый пароль</label>-->
+<!--                <input type="password" id="confirm-password" name="confirm-password" placeholder="Подтвердите новый пароль" required>-->
                 <button type="submit">Изменить пароль</button>
             </form>
         </div>
@@ -92,9 +89,9 @@
         if (file) {
             reader.readAsDataURL(file);
         } else {
-                preview.src = '#'; // Установите изображение по умолчанию, если файл не выбран
-            }
+            preview.src = '#'; // Установите изображение по умолчанию, если файл не выбран
         }
+    }
 
 
         let profileMenu = document.getElementById("profileMenu");

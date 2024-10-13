@@ -1,24 +1,49 @@
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-from users.models import Follow
+from users.models import Follow, Profile
 from blog.models import Tweet, Like, Hashtag, Comment
-from django.http import JsonResponse, request
+from django.http import JsonResponse, request, HttpResponse
 import json
-from blog.forms import TweetForm
-from django.core import serializers
+from blog.forms import TweetForm, CustomPasswordChangeForm
+
 
 
 class Settings_view(ListView):
     template_name = 'settings_page.html'
+
     def get_queryset(self):
         user = self.request.user
-        return Follow.objects.filter(user=user)
+        return Profile.objects.filter(user=user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         data = super().get_context_data(**kwargs)
+        data['email'] = data['profile_list'][0].user.email
+        data['location'] = data['profile_list'][0].location
+        data['about'] = data['profile_list'][0].about
+        data['auth_user'] = self.request.user
+        data['form'] = CustomPasswordChangeForm(self.request.user)
         return data
+
+def settings_update(request):
+    if request.method == 'POST':
+        profile = get_object_or_404(Profile, user=request.user)
+        image = request.FILES.get('profile-image')
+        print(type(image))
+        if image:
+            profile.set_image(image)
+        about = request.POST.get('about')
+        if about:
+            profile.set_about(about)
+        location = request.POST.get('location')
+        if location:
+            profile.set_location(location)
+        profile.save()
+
+    return redirect('/settings')
 
 
 class Home_list_view(ListView):
@@ -81,7 +106,6 @@ def create_tweet(request):
     if request.method == 'POST':
         form = TweetForm(request.POST)
         if form.is_valid():
-            print("FORM VALID")
             tweet = form.save(commit=False)
             tweet.author = request.user
             tweet.save()
@@ -120,9 +144,7 @@ def tweet_detail(request, tweet_id):
                 'content' : com.content,
                 'date_posted': com.date_posted,
                 'img':com.author.profile.image.url,
-                # Добавьте другие поля по необходимости
             })
-        print(send_commends)
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
             data = {
                 'author': tweet.author.username,
@@ -190,32 +212,31 @@ class Search_view(ListView):
         return data
 
 
-class Comment_view(ListView):
-    model = Tweet
-    template_name = 'search_result_page.html'
+def comment_view(request, tweet_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        content = data.get('content')
+        tweet = Tweet.objects.get(id=tweet_id)
+        comment, created = Comment.objects.get_or_create(author=request.user, content=content, tweet=tweet)
+        if created:
+            return JsonResponse({'success': True})
+    if request.method == 'PUT':
+        pass
+    if request.method == 'DELETE':
+        pass
 
-    def get_queryset(self):
-        user = self.request.user
-        return Follow.objects.filter(user=user)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        data = super().get_context_data(**kwargs)
-        users = []
-        users.append(self.request.user)
-        for i in data['object_list']:
-            users.append(i.follow_user)
-        try:
-            query = self.request.GET.get('tag')
-            hashtag = Hashtag.objects.get(text=query)
-            print(hashtag)
-            tweets = hashtag.tweets.all().order_by('-date_posted')
-            print(tweets)
-            data['flag_posts'] = True
-            data['tweets'] = tweets
-            liked_tweet_ids = Like.objects.filter(user=self.request.user).values_list('tweet_id', flat=True)
-            data['liked_tweet_ids'] = list(liked_tweet_ids)
-        except:
-            data['flag_posts'] = False
-        data['user'] = self.request.user
-        data['object_list'] = data['object_list'][:6]
-        return data
+def password_update(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Чтобы не разлогинивать пользователя
+            return HttpResponse("Success") # Переход на страницу профиля или другую
+        else:
+            qwe = ""
+            for error in form.errors.values():
+                qwe += str(error)
+            return HttpResponse(qwe)
+    else:
+        return HttpResponse("non post")

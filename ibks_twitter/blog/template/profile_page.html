@@ -25,12 +25,12 @@
     <div class="navbar-center">
     </div>
     <div class="navbar-right">
-        <img src="{{user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
+        <img src="{{auth_user.profile.image.url}}" class="nav-profile-img" onclick="toggleMenu()">
     </div>
     <div class="profile-menu-wrap" id="profileMenu">
         <div class="profile-menu">
             <div class="user-info">
-                <img src="{{user.profile.image.url}}" alt="">
+                <img src="{{auth_user.profile.image.url}}" alt="">
                 <div>
                     <h3><a href="/profile/{{auth_user.username}}" class="profile-menu-links">{{auth_user.username}}</a></h3>
                 </div>
@@ -103,17 +103,17 @@
             </div>
             <div class="comment-section" onclick="childClick(event)">
                  <!-- Список комментариев -->
-                <div id="comment-list-{{tweet.id}}">
-                    <hr class="comment-line">
-                    <div class="comment-item">
-                        <img src="{% static 'img/start.jpg' %}">
-                        <div class="comment-content">
-                            <strong>user</strong>
-                            <p>comment</p>
-                            <span class="comment-date">09 октября 2024</span>
-                        </div>
-                    </div>
-                </div>
+<!--                <div id="comment-list-{{tweet.id}}">-->
+<!--                    <hr class="comment-line">-->
+<!--                    <div class="comment-item">-->
+<!--                        <img src="{% static 'img/start.jpg' %}">-->
+<!--                        <div class="comment-content">-->
+<!--                            <strong>user</strong>-->
+<!--                            <p>comment</p>-->
+<!--                            <span class="comment-date">09 октября 2024</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
               <!-- Секция для добавления нового комментария -->
                 <div class="comment-item" onclick="childClick(event)">
                     <img src="{{user.profile.image.url}}">
@@ -145,11 +145,26 @@
     <div id="tweetModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                 <img id="modal-img">
+                 <h2 id="modal-author"></h2>
+            </div>
             <h2 id="modal-author"></h2>
             <p id="modal-content"></p>
             <small id="modal-date"></small>
+            <div class="post-activity">
+                <div class="post-activity-link">
+                    <button id="modal-likeBtn" class="like-btn" data-liked="false">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <span>2</span>
+                </div>
+            </div>
+            <div id="modal-comments"></div>
         </div>
-    </div>
+    </div>>
+<!--   Модальное окно редактирования твита-->
+
 <script>
     let profileMenu = document.getElementById("profileMenu");
     function toggleMenu(){
@@ -178,35 +193,6 @@
         textarea.style.height = textarea.scrollHeight + 'px'; // Устанавливаем новую высоту
     }
 
-    function openModal(tweetId) {
-        $.ajax({
-        url: `/tweet/${tweetId}/`,
-        type: 'GET',
-        success: function(data) {
-            // Заполнение модального окна данными твита
-            document.getElementById('modal-author').textContent = data.author;
-            document.getElementById('modal-content').textContent = data.content;
-            document.getElementById('modal-date').textContent = data.date_posted;
-            // Отображение модального окна
-            document.getElementById('tweetModal').style.display = 'block';
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    });
-    }
-    function closeModal() {
-        const modal = document.getElementById("tweetModal");
-        modal.style.display = "none";  // Скрываем модальное окно
-    }
-
-    // Закрытие модального окна при клике вне его содержимого
-    window.onclick = function(event) {
-        const modal = document.getElementById("tweetModal");
-        if (event.target === modal) {
-            closeModal();
-        }
-    }
 
     function childClick(event) {
         event.stopPropagation(); // Останавливает всплытие события
@@ -218,19 +204,21 @@
             alert("Комментарий не может быть пустым");
             return;
         }
-        const now = new Date();
-        const time = now.toLocaleString();
-        var newComment = `<hr class="comment-line">
-                    <div class="comment-item">
-                        <img src="{{user.profile.image.url}}">
-                        <div class="comment-content">
-                            <strong>{{user.username}}</strong>
-                            <p>${commentInput.trim()}</p>
-                            <span class="comment-date">${time}</span>
-                        </div>
-                    </div>`
-        $(`#comment-list-${tweetId}`).append(newComment);
-        $(`#comment-${tweetId}`).val('');
+
+        fetch(`/comment/${tweetId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({ content: commentInput }) // Отправляем коммент
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            location.reload();
+        })
     }
 
     function likeClick(event, tweetId) {
@@ -283,6 +271,64 @@
     }
     return cookieValue;
 }
+
+
+    function openModal(tweetId) {
+       $.ajax({
+        url: `/tweet/${tweetId}/`,
+        type: 'GET',
+        success: function(data) {
+
+            // Заполнение модального окна данными твита
+            document.getElementById('modal-author').textContent = data.author;
+            document.getElementById('modal-content').textContent = data.content;
+            document.getElementById('modal-date').textContent = data.date_posted;
+            document.getElementById('modal-img').src = data.img;
+            $('#modal-comments').empty()
+            data.comments.forEach(comment => {
+                var newComment = `<hr class="comment-line">
+                    <div class="comment-item">
+                        <img src="${comment.img}">
+                        <div class="comment-content">
+                            <strong>${comment.author}</strong>
+                            <p>${comment.content}</p>
+                            <span class="comment-date">${comment.date_posted}</span>
+                        </div>
+                    </div>`
+
+                $('#modal-comments').append(newComment);
+            });;
+            // Отображение модального окна
+            document.getElementById('tweetModal').style.display = 'block';
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    });
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("tweetModal");
+        modal.style.display = "none";  // Скрываем модальное окно
+    }
+
+    // Закрытие модального окна при клике вне его содержимого
+    window.onclick = function(event) {
+        const modal = document.getElementById("tweetModal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+
+
+    $(document).ready(function() {
+    // Устанавливаем обработчик события клика на все твиты
+        $('#new_tweets').on('click', '.post', function() {
+            var tweetId = $(this).attr('data-post-id');
+            openModal(tweetId)
+        });
+    });
 
 </script>
 </body>

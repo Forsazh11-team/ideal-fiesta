@@ -1,4 +1,7 @@
 from django import forms
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
+
 from .models import Tweet
 
 class TweetForm(forms.ModelForm):
@@ -22,3 +25,9 @@ class TweetForm(forms.ModelForm):
         hashtags_data = self.cleaned_data['hashtags']
         hashtags_list = [tag.strip() for tag in hashtags_data.split(',') if tag.strip()]
         return hashtags_list
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    class Meta:
+        model = User  # Или ваша модель пользователя
+        fields = ['old_password', 'new_password1', 'new_password2']

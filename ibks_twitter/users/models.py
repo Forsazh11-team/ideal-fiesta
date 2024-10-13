@@ -17,8 +17,8 @@ class OTP(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='user.png/', upload_to='img')
-    location = models.CharField(max_length=30, default="")
-    about = models.CharField(max_length=150, default="")
+    location = models.CharField(max_length=30, default=" ")
+    about = models.CharField(max_length=150, default=" ")
     def __str__(self):
         return f'{self.user.username} Profile'
     @property
@@ -42,7 +42,7 @@ class Profile(models.Model):
     def set_about(self, about):
         self.about = about
     def set_image(self, image):
-        pass
+        self.image = image
 
 
 class Follow(models.Model):
