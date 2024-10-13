@@ -27,12 +27,4 @@ Nginx сервит статические файлы. Нужно создать 
 
 `sudo certbot certonly --nginx`
 
-Изменить конфиг сайта, добавив туда следующее:
-
-```
-listen 443 ssl;
-ssl_certificate /etc/letsencrypt/live/www.ibks_twitter.ru/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/www.ibks_twitter.ru/privkey.pem;
-include /etc/letsencrypt/options-ssl-nginx.conf;
-ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-```
+Изменить конфиг сайта, убрав комментирование со строк, начиная с listen 443 ssl.
