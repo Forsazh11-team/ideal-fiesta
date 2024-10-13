@@ -20,3 +20,19 @@ Nginx сервит статические файлы. Нужно создать 
 о дубликатах, но, например, `python manage.py findstatic css/edit.css` говорит,
 что дубликаты на самом деле одни и те же файлы. Пока не фиксил TODO.
 
+# HTTPS
+
+Для настройки HTTPS можно использовать certbot. На Fedora `sudo dnf install certbot`.
+Это стоит делать уже непосредственно на сервере, после получения доменного имени.
+
+`sudo certbot certonly --nginx`
+
+Изменить конфиг сайта, добавив туда следующее:
+
+```
+listen 443 ssl;
+ssl_certificate /etc/letsencrypt/live/www.ibks_twitter.ru/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/www.ibks_twitter.ru/privkey.pem;
+include /etc/letsencrypt/options-ssl-nginx.conf;
+ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+```
