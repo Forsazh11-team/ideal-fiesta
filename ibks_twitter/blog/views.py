@@ -137,6 +137,11 @@ def tweet_detail(request, tweet_id):
         tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
         comments = Comment.objects.filter(tweet=tweet)
         send_commends = []
+        liked_tweet_ids = Like.objects.filter(user=request.user).values_list('tweet_id', flat=True)
+        if tweet_id in liked_tweet_ids:
+            liked = 1
+        else:
+            liked = 0
         for com in comments:
             send_commends.append({
                 'tweet': tweet_id,
@@ -147,11 +152,14 @@ def tweet_detail(request, tweet_id):
             })
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Проверка, является ли запрос AJAX
             data = {
+                'id': tweet_id,
                 'author': tweet.author.username,
                 'content': tweet.content,
                 'date_posted': tweet.date_posted.strftime('%Y-%m-%d %H:%M:%S'),
                 'img': tweet.author.profile.image.url,
                 'comments': send_commends,
+                'likes': tweet.likes,
+                'liked': liked,
             }
             return JsonResponse(data)
     if request.method == 'PUT':

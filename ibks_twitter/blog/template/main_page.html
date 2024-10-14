@@ -68,13 +68,23 @@
         <a href ="/tweet" onclick="handleClick(event)"><div id="new_tweets"></div></a>
         {% if flag_posts %}
         {% for tweet in tweets %}
-        <div class="post" data-post-id="{{ tweet.id }}" onclick="openModale({{ tweet.id }});">
+        <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
             <div class="post-author">
                 <img src=" {{ tweet.author.profile.image.url }}">
                 <div>
                     <a href="/{{tweet.author.username}}"><h1>{{tweet.author.username}}</h1></a>
                     <small>{{tweet.date_posted}}</small>
                 </div>
+                {% if tweet.author.username == user.username %}
+                <button class="edit-delete-btn" id="edit-delete-btn-{{tweet.id}}" onclick="childClick(event);">
+                <i class="fas fa-ellipsis-v"></i> <!-- Иконка для кнопки -->
+                </button>
+                <!-- Всплывающее окно -->
+                <div class="popup-menu" onclick="childClick(event);">
+                    <button onclick="editPost({{tweet.id}})">Редактировать</button>
+                    <button onclick="deletePost({{tweet.id}})">Удалить</button>
+                </div>
+                {% endif %}
             </div>
             <div class="post-content">
                 {{tweet.content}}
@@ -143,10 +153,9 @@
             <small id="modal-date"></small>
             <div class="post-activity">
                 <div class="post-activity-link">
-                    <button id="modal-likeBtn" class="like-btn" data-liked="false">
-                        <i class="far fa-heart"></i>
+                    <button id="modal-likeBtn" class="like-btn" data-liked="">
                     </button>
-                    <span>2</span>
+                    <span id="modal-likes-count"></span>
                 </div>
             </div>
             <div id="modal-comments"></div>
@@ -247,8 +256,8 @@
         });
     });
 
-    function openModale(tweetId) {
-        $.ajax({
+    function openModal(tweetId) {
+       $.ajax({
         url: `/tweet/${tweetId}/`,
         type: 'GET',
         success: function(data) {
@@ -258,7 +267,21 @@
             document.getElementById('modal-content').textContent = data.content;
             document.getElementById('modal-date').textContent = data.date_posted;
             document.getElementById('modal-img').src = data.img;
-            $('#modal-comments').empty()
+            document.getElementById('modal-likes-count').textContent = data.likes;
+            var button = document.getElementById('modal-likeBtn');
+            button.onclick = function(event) {
+                ModallikeClick(event, data.id);
+            };
+            var id = data.id;
+            if (data.liked) {
+                button.innerHTML='<i class="fas fa-heart" style="color: #704c9e;"></i>'
+                button.setAttribute("data-liked", 'true')
+            }
+            else {
+                button.innerHTML='<i class="far fa-heart"></i>'
+                button.setAttribute("data-liked", 'false')
+            }
+            $('#modal-comments').empty();
             data.comments.forEach(comment => {
                 var newComment = `<hr class="comment-line">
                     <div class="comment-item">
@@ -269,7 +292,7 @@
                             <span class="comment-date">${comment.date_posted}</span>
                         </div>
                     </div>`
-                
+
                 $('#modal-comments').append(newComment);
             });;
             // Отображение модального окна
@@ -366,6 +389,42 @@
         });
     }
 
+    function ModallikeClick(event, tweetId) {
+        const likeBtn = document.getElementById(`modal-likeBtn`);
+        const likeCountSpan = document.getElementById(`modal-likes-count`);
+        const isLiked = likeBtn.getAttribute('data-liked') === 'true';
+        // AJAX-запрос для обновления лайка в базе данных
+        fetch(`/like/${tweetId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({ liked: !isLiked }) // Отправляем статус лайка
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.liked) {
+                likeBtn.setAttribute('data-liked', 'true');
+                likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #704c9e;"></i>'; // Закрашенное сердце
+                likeCountSpan.textContent = parseInt(likeCountSpan.textContent) + 1;
+            } else {
+                likeBtn.setAttribute('data-liked', 'false');
+                likeBtn.innerHTML = '<i class="far fa-heart"></i>'; // Обведённое сердце
+                likeCountSpan.textContent = parseInt(likeCountSpan.textContent) - 1; // Уменьшаем счётчик
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        likeClick(event,tweetId)
+    }
+
     function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -381,6 +440,46 @@
     return cookieValue;
 }
 
+    // Получаем все кнопки с классом 'edit-delete-btn'
+    const buttons = document.querySelectorAll('.edit-delete-btn');
+
+    buttons.forEach((button, index) => {
+        const popupMenu = button.nextElementSibling; // Получаем соседний элемент (всплывающее меню)
+
+        // Обработка наведения на кнопку
+        button.addEventListener('mouseenter', function() {
+            popupMenu.style.display = 'block'; // Показываем всплывающее окно
+        });
+
+        // Обработка наведения на всплывающее окно
+        popupMenu.addEventListener('mouseenter', function() {
+            popupMenu.style.display = 'block'; // Оставляем всплывающее окно открытым
+        });
+
+        // Обработка ухода мыши с кнопки
+        button.addEventListener('mouseleave', function() {
+            if (!popupMenu.matches(':hover')) { // Проверяем, что курсор не на всплывающем окне
+                popupMenu.style.display = 'none'; // Скрываем всплывающее окно
+            }
+        });
+
+        // Обработка ухода мыши со всплывающего окна
+        popupMenu.addEventListener('mouseleave', function() {
+            popupMenu.style.display = 'none'; // Скрываем всплывающее окно
+        });
+    });
+
+    // Пример функции редактирования поста
+    function editPost(id) {
+        alert(`Редактировать пост ${id}`);
+        // Здесь добавьте логику редактирования
+    }
+
+    // Пример функции удаления поста
+    function deletePost(id) {
+        alert(`Удалить пост ${id}`);
+        // Здесь добавьте логику удаления
+    }
     
 </script>
 </body>

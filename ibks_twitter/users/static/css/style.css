@@ -280,9 +280,9 @@ a{
 /* Стили для панели подписок */
 .subscriptions-panel {
     position: fixed;
-    right: 20px; /* Добавляем отступ справа */
-    top: 78px;
-    width: 100vh; /* Увеличиваем ширину панели */
+    right: 30px; /* Добавляем отступ справа */
+    top: 87px;
+    width: 50vh; /* Увеличиваем ширину панели */
     border-radius: 8px;    
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -476,12 +476,66 @@ a{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.edit-delete-btn {
+    position: absolute; /* Абсолютное позиционирование */
+    top: 5px; /* Расположение от верхнего края */
+    right: 5px; /* Расположение от правого края */
+    background: transparent; /* Прозрачный фон */
+    border: none; /* Без границы */
+    cursor: pointer; /* Указатель при наведении */
+    z-index: 10; /* Увеличиваем z-index, чтобы кнопка была поверх других элементов */
+}
 
+.edit-delete-btn i {
+    font-size: 15px; /* Размер иконки */
+    color: #704c9e; /* Цвет иконки */
+}
 
+.edit-delete-panel {
+    display: none;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.edit-delete-panel.visible {
+    display: block;
+}
+
+/* Всплывающее окно */
+.popup-menu {
+    display: none; /* Скрыто по умолчанию */
+    position: absolute; /* Позиционирование относительно родителя */
+    top: 60%; /* Положение под кнопкой */
+    right: 0; /* Положение справа */
+    background-color: white; /* Белый фон */
+    border: 1px solid #ddd; /* Граница */
+    border-radius: 5px; /* Закругленные углы */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень */
+    padding: 10px; /* Отступы */
+    z-index: 1; /* На переднем плане */
+    width: 150px; /* Ширина окна */
+}
+
+.popup-menu button {
+    background: none; /* Без фона */
+    border: none; /* Без границы */
+    cursor: pointer; /* Указатель при наведении */
+    padding: 5px; /* Отступы */
+    width: 100%; /* Полная ширина */
+    text-align: left; /* Выравнивание по левому краю */
+}
+
+.popup-menu button:hover {
+    background-color: #f0f0f0; /* Фон при наведении */
+}
 
 .post-author{
     display: flex;
     align-items: flex-start;
+    position: relative; /* Устанавливаем относительное позиционирование для контейнера */
 }
 
 .post-author img{
@@ -684,8 +738,6 @@ a{
 .comment-item button:focus {
     outline: none; /* Убираем обводку при фокусе */
 }
-
-
 
 
 .profile-menu-wrap{
@@ -963,5 +1015,39 @@ a{
 }
 
 
+.edit-modal {
+    display: none; /* Скрываем модальное окно по умолчанию */
+    position: fixed; /* Открывается поверх страницы */
+    z-index: 1000; /* Положение поверх других элементов */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Добавляет прокрутку, если нужно */
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+}
 
+.edit-modal-content {
+    background-color: #fff;
+    margin: 15% auto; /* Центрирование окна */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ширина модального окна */
+    max-width: 500px; /* Максимальная ширина */
+    border-radius: 5px; /* Скругленные углы */
+}
+
+.edit-close {
+    color: #aaa; /* Цвет кнопки закрытия */
+    float: right; /* Правое положение */
+    font-size: 28px; /* Размер */
+    font-weight: bold; /* Жирный шрифт */
+}
+
+.edit-close:hover,
+.edit-close:focus {
+    color: black; /* Цвет при наведении */
+    text-decoration: none; /* Убираем подчеркивание */
+    cursor: pointer; /* Указатель при наведении */
+}
 
