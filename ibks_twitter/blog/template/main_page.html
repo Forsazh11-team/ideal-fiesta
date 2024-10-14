@@ -129,13 +129,20 @@
                 <h3>Ваши подписки</h3>
                 <ul class="subscriptions-list">
                     {% for user in object_list %}
+                    {% if forloop.counter <= 5 %}
                     <li class="subscription-item">
                        <button onclick="location.href='/profile/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
                         <img src="{{ user.follow_user.profile.image.url }}">
                         <span>{{ user.follow_user.username }}</span>
                         </button>
                     </li>
+                    {% endif %}
                     {% endfor %}
+                    <li class="subscription-item">
+                       <button onclick="openFollowingsModal();" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
+                        <span>Показать всех</span>
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -161,6 +168,24 @@
             <div id="modal-comments"></div>
         </div>
     </div>
+    <!-- Модальное окно для подписок -->
+    <div id="followingsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Ваши подписки</h2>
+        <ul class="subscriptions-list">
+            {% for user in object_list %}
+            <li class="subscription-item">
+                <button onclick="location.href='/profile/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
+                <div class="user-avatar"><img src="{{ user.follow_user.profile.image.url }}"></div>
+                <span>{{ user.follow_user.username }}</span>
+                </button>
+                </li>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 <script>
     let profileMenu = document.getElementById("profileMenu");
     function toggleMenu(){
@@ -261,6 +286,7 @@
         url: `/tweet/${tweetId}/`,
         type: 'GET',
         success: function(data) {
+            document.body.classList.add('modal-open');
 
             // Заполнение модального окна данными твита
             document.getElementById('modal-author').textContent = data.author;
@@ -311,8 +337,12 @@
     // Закрытие модального окна при клике вне его содержимого
     window.onclick = function(event) {
         const modal = document.getElementById("tweetModal");
+        const followings = document.getElementById("followingsModal");
         if (event.target === modal) {
             closeModal();
+        }
+        if (event.target === followings) {
+            closeFollowingsModal();
         }
     }
 
@@ -480,6 +510,19 @@
         alert(`Удалить пост ${id}`);
         // Здесь добавьте логику удаления
     }
+
+    // Функция для открытия модального окна
+    function openFollowingsModal() {
+        document.body.classList.add('modal-open');
+        document.getElementById("followingsModal").style.display = "block";
+    }
+
+    // Функция для закрытия модального окна
+    function closeFollowingsModal() {
+        document.body.classList.remove('modal-open');
+        document.getElementById("followingsModal").style.display = "none";
+    }
+
     
 </script>
 </body>

@@ -50,6 +50,7 @@ class Follow(models.Model):
     follow_user = models.ForeignKey(User, related_name='follow_user', on_delete=models.CASCADE)
 
 
+
 def create_profile(sender, instance, created, **kwargs):
     if created:
         user_profile = Profile(user=instance)

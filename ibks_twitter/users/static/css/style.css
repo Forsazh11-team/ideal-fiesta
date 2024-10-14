@@ -16,6 +16,9 @@ a{
     color: #5f5f5f;
 }
 
+body.modal-open {
+    overflow: hidden; /* Убираем прокрутку при открытом модальном окне */
+}
 
 .navbar{
     display: flex;
@@ -344,6 +347,20 @@ a{
 /* Ховеры */
 .subscription-item:hover {
     background-color: #e9f5ff;
+}
+
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Круглая форма */
+    overflow: hidden; /* Обрезает изображение, если оно больше */
+    margin-right: 10px;
+}
+
+.user-avatar img {
+    width: 100%; /* Ширина 100% контейнера */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
 }
 
 
@@ -976,14 +993,20 @@ a{
     background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный черный фон */
 }
 
+
 .modal-content {
     background-color: #fff;
-    margin: 15% auto; /* Центрирование */
+    margin: 8% auto; /* Центрирование */
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Ширина модального окна */
     max-width: 600px; /* Максимальная ширина */
     border-radius: 10px; /* Закругленные углы */
+}
+
+.modal-content h2{
+    margin-top: 5px;
+    
 }
 
 .modal-header{
@@ -1015,39 +1038,11 @@ a{
 }
 
 
-.edit-modal {
-    display: none; /* Скрываем модальное окно по умолчанию */
-    position: fixed; /* Открывается поверх страницы */
-    z-index: 1000; /* Положение поверх других элементов */
-    left: 0;
-    top: 0;
-    width: 100%; /* Полная ширина */
-    height: 100%; /* Полная высота */
-    overflow: auto; /* Добавляет прокрутку, если нужно */
-    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+.clickable-text {
+    cursor: pointer; /* Указывает, что текст кликабельный */
 }
 
-.edit-modal-content {
-    background-color: #fff;
-    margin: 15% auto; /* Центрирование окна */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Ширина модального окна */
-    max-width: 500px; /* Максимальная ширина */
-    border-radius: 5px; /* Скругленные углы */
+/* Убираем выделение текста при клике */
+.clickable-text:focus {
+    outline: none; /* Убираем обводку при фокусировке */
 }
-
-.edit-close {
-    color: #aaa; /* Цвет кнопки закрытия */
-    float: right; /* Правое положение */
-    font-size: 28px; /* Размер */
-    font-weight: bold; /* Жирный шрифт */
-}
-
-.edit-close:hover,
-.edit-close:focus {
-    color: black; /* Цвет при наведении */
-    text-decoration: none; /* Убираем подчеркивание */
-    cursor: pointer; /* Указатель при наведении */
-}
-
