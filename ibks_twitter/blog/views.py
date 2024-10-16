@@ -136,12 +136,16 @@ def tweet_detail(request, tweet_id):
     if request.method == 'GET':
         tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
         comments = Comment.objects.filter(tweet=tweet)
+        tags = tweet.hashtags.all()
         send_commends = []
+        send_tags = []
         liked_tweet_ids = Like.objects.filter(user=request.user).values_list('tweet_id', flat=True)
         if tweet_id in liked_tweet_ids:
             liked = 1
         else:
             liked = 0
+        for tag in tags:
+            send_tags.append(tag.text)
         for com in comments:
             send_commends.append({
                 'tweet': tweet_id,
@@ -160,6 +164,7 @@ def tweet_detail(request, tweet_id):
                 'comments': send_commends,
                 'likes': tweet.likes,
                 'liked': liked,
+                'tags': send_tags,
             }
             return JsonResponse(data)
     if request.method == 'PUT':

@@ -1,9 +1,17 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from PIL import Image
 
 
 EMAIL_HOST_PASSWORD = 'etyl yawe aqop ivpo'
+
+
+# Создание изображения размером 1x1 с прозрачностью
+transparent_pixel = Image.new("RGBA", (1, 1), (0, 0, 0, 0))
+
+# Сохранение изображения
+transparent_pixel.save("trackingpixel.png")
 
 def send_emails(sender_email, subject, body, recipient_emails):
     # Настройки SMTP-сервера
