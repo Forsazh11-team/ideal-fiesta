@@ -80,6 +80,7 @@ class Profile_list_view(ListView):
 
     def get_queryset(self):
         user = self.request.user
+        print(Follow.objects.filter(user=user))
         return Follow.objects.filter(user=user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -97,7 +98,7 @@ class Profile_list_view(ListView):
         data['user'] = user
         data['auth_user'] = self.request.user
         data['flag_track'] = True
-        if(data['user'] == data['auth_user'] or data['object_list'].filter(user=data['auth_user']).exists()):
+        if(data['object_list'].filter(follow_user=data['user']).exists()):
             data['flag_track'] = False
         return data
 

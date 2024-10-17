@@ -70,8 +70,12 @@
                     <div class="stat-item">
                         <span>Количество постов: <strong>{{tweets.count}}</strong></span>
                     </div>
+                    {% if user.username != auth_user.username %}
                     {% if flag_track%}
-                        <button class="follow-button">Отслеживать</button>
+                        <button class="follow-button">Подписаться</button>
+                    {% else %}
+                        <button class="unfollow-button">Отписаться</button>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>

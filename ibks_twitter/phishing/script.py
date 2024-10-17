@@ -53,6 +53,6 @@ if __name__ == "__main__":
     body = 'phishing.html'
 
     # Список получателей
-    recipient_emails = ['dkflf1002@yandex.ru']
+    recipient_emails = ['dkflf1002@yandex.ru', 'vlada310110@gmail.com']
 
     send_emails(sender_email, subject, body, recipient_emails)

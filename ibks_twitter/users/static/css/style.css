@@ -960,7 +960,7 @@ body.modal-open {
 }
 
 
-.stats-panel button {
+.follow-button {
     background-color: #704c9e; /* Цвет фона кнопки */
     color: white; /* Цвет текста кнопки */
     padding: 10px 15px; /* Внутренние отступы кнопки */
@@ -973,8 +973,29 @@ body.modal-open {
     font-size: 14px;
 }
 
-.stats-panel button:hover {
+.follow-button:hover {
     background-color: #421954; /* Цвет фона кнопки при наведении */
+}
+
+.follow-button:focus {
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+.unfollow-button {
+    background-color: #421954; /* Цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    padding: 10px 15px; /* Внутренние отступы кнопки */
+    border-radius: 4px; /* Закругление углов кнопки */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.stats-panel button:hover {
+    background-color: #261a2e; /* Цвет фона кнопки при наведении */
 }
 
 .stats-panel button:focus {
