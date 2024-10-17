@@ -715,6 +715,43 @@ body.modal-open {
     outline: none; /* Убираем стандартное выделение */
 }
 
+.post-content textarea::-webkit-scrollbar {
+    width: 0px;
+}
+
+.post-content textarea {
+    width: 100%; /* Ширина текстового поля */
+    padding: 10px; /* Внутренние отступы */
+    border: 1px solid #d1d1d1; /* Рамка текстового поля */
+    border-radius: 4px; /* Закругление углов текстового поля */
+    resize: none; /* Запрет изменения размера текстового поля */
+    transition: border-color 0.3s; /* Плавный переход цвета рамки */
+}
+
+.post-content textarea:focus {
+    border-color: #704c9e; /* Цвет рамки при фокусе */
+    outline: none; /* Убираем стандартное выделение */
+}
+
+.edit-area::-webkit-scrollbar {
+    width: 0px;
+}
+
+.edit-area  {
+    margin-top: 10px;
+    width: 100%; /* Ширина текстового поля */
+    padding: 10px; /* Внутренние отступы */
+    border: 1px solid #d1d1d1; /* Рамка текстового поля */
+    border-radius: 4px; /* Закругление углов текстового поля */
+    resize: none; /* Запрет изменения размера текстового поля */
+    transition: border-color 0.3s; /* Плавный переход цвета рамки */
+}
+
+.edit-area:focus {
+    border-color: #704c9e; /* Цвет рамки при фокусе */
+    outline: none; /* Убираем стандартное выделение */
+}
+
 .comment-item img{
     width: 35px;
     border-radius: 50%;

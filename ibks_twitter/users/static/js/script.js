@@ -491,10 +491,40 @@
         });
     });
 
+
     // Пример функции редактирования поста
     function editPost(id) {
-        alert(`Редактировать пост ${id}`);
-        // Здесь добавьте логику редактирования
+        var edit_area = document.getElementById(`content-${id}`);
+        var content = edit_area.innerText;;
+         // Создаем элемент textarea
+        const textArea = document.createElement('textarea');
+
+        // Устанавливаем атрибуты
+        textArea.setAttribute('rows', '2');
+        textArea.setAttribute('class', 'edit-area');
+        textArea.setAttribute('id', `edit-${id}`);
+        textArea.setAttribute('required', '');
+        textArea.setAttribute('onclick', 'childClick(event);');
+        textArea.value = content
+
+
+        // Добавляем событие oninput для автоизменения размера
+        textArea.setAttribute('oninput', 'autoResize(this)');
+        textArea.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) { // Check if Enter is pressed without Shift
+                    event.preventDefault(); // Prevents adding a new line
+                    // Создаем новый элемент для замены textarea
+                    const textDisplay = document.createElement('div'); // Можно использовать 'span' или 'div'
+                    textDisplay.setAttribute('id', `content-${id}`);
+                    textDisplay.setAttribute('class', 'post-content'); // Класс для стилей текста
+                    textDisplay.textContent = this.value; // Текст для отображения
+                    this.replaceWith(textDisplay);
+                    // Дальше нужно изменить пост в бд
+
+                }
+        });
+        edit_area.replaceWith(textArea);
+
     }
 
     // Пример функции удаления поста
