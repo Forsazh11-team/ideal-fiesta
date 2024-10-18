@@ -39,7 +39,7 @@
                 <img src="{% static 'img/settings.png' %}" alt="">
                 <p>Настройки</p>
             </a>
-            <a href="#" class="profile-menu-links">
+            <a href="{% url 'logout' %}" class="profile-menu-links">
                 <img src="{% static 'img/logout.png' %}" alt="">
                 <p>Выход</p>
             </a>
@@ -71,11 +71,14 @@
                         <span>Количество постов: <strong>{{tweets.count}}</strong></span>
                     </div>
                     {% if user.username != auth_user.username %}
-                    {% if flag_track%}
-                        <button class="follow-button">Подписаться</button>
-                    {% else %}
-                        <button class="unfollow-button">Отписаться</button>
-                    {% endif %}
+                    <button id="flwBtn" class="follow-button" follow="{% if flag_track %}false{% else %}true{% endif %}"
+                                onclick="followingClick(event, '{{user.username}}')">
+                            {% if flag_track %}
+                                Подписаться
+                            {% else %}
+                                Отписаться
+                            {% endif %}
+                    </button>
                     {% endif %}
                 </div>
             </div>
@@ -125,18 +128,6 @@
                     {% endfor %}
             </ul>
             <div class="comment-section" onclick="childClick(event)">
-                 <!-- Список комментариев -->
-<!--                <div id="comment-list-{{tweet.id}}">-->
-<!--                    <hr class="comment-line">-->
-<!--                    <div class="comment-item">-->
-<!--                        <img src="{% static 'img/start.jpg' %}">-->
-<!--                        <div class="comment-content">-->
-<!--                            <strong>user</strong>-->
-<!--                            <p>comment</p>-->
-<!--                            <span class="comment-date">09 октября 2024</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
               <!-- Секция для добавления нового комментария -->
                 <div class="comment-item" onclick="childClick(event)">
                     <img src="{{user.profile.image.url}}">

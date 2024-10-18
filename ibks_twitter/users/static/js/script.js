@@ -411,6 +411,42 @@
         });
     }
 
+    function followingClick(event, username) {
+        event.stopPropagation(); // Останавливает всплытие события
+        const followBtn = document.getElementById(`flwBtn`);
+        const follow = followBtn.getAttribute('follow') === 'true';
+        console.log("follow = ", follow)
+        fetch(`/follow/${username}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({'follow': follow})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if(data.follow == 1){
+                followBtn.setAttribute('follow', 'true');
+                followBtn.style.background='#704c9e';
+                console.log("Follow")
+            }
+            else{
+                followBtn.setAttribute('follow', 'false')
+                followBtn.style.background='#421954';
+                console.log("Unfollow")
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
     function ModallikeClick(event, tweetId) {
         const likeBtn = document.getElementById(`modal-likeBtn`);
         const likeCountSpan = document.getElementById(`modal-likes-count`);
@@ -506,8 +542,6 @@
         textArea.setAttribute('required', '');
         textArea.setAttribute('onclick', 'childClick(event);');
         textArea.value = content
-
-
         // Добавляем событие oninput для автоизменения размера
         textArea.setAttribute('oninput', 'autoResize(this)');
         textArea.addEventListener('keydown', function(event) {
@@ -520,7 +554,14 @@
                     textDisplay.textContent = this.value; // Текст для отображения
                     this.replaceWith(textDisplay);
                     // Дальше нужно изменить пост в бд
-
+                    fetch(`/tweet/${id}/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+                        },
+                        body: JSON.stringify({data: this.value}) // Отправляем статус лайка
+                    })
                 }
         });
         edit_area.replaceWith(textArea);
@@ -529,8 +570,27 @@
 
     // Пример функции удаления поста
     function deletePost(id) {
-        alert(`Удалить пост ${id}`);
-        // Здесь добавьте логику удаления
+        fetch(`/tweet/${id}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({}) // Отправляем статус лайка
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.Success == 1) {
+                location.reload()
+            } else {
+                throw new Error('error delete');
+            }
+        })
     }
 
     // Функция для открытия модального окна

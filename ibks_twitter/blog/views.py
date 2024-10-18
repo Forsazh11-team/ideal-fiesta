@@ -168,11 +168,20 @@ def tweet_detail(request, tweet_id):
                 'tags': send_tags,
             }
             return JsonResponse(data)
-    if request.method == 'PUT':
-        pass
-    if request.method == 'DELETE':
-        pass
 
+    if request.method == 'PUT':
+        #update tweet
+        data = json.loads(request.body)
+        new_body = data.get('data')
+        number = Tweet.objects.filter(id=tweet_id).update(content=new_body)
+        return JsonResponse(data)
+
+    if request.method == 'DELETE':
+        #minimal example delete tweet
+        tweet = get_object_or_404(Tweet, id=tweet_id)
+        tweet.delete()
+        data = {'Success': 1}
+        return JsonResponse(data)
 
 @require_POST
 def like_tweet(request, tweet_id):
@@ -254,3 +263,18 @@ def password_update(request):
             return HttpResponse(qwe)
     else:
         return HttpResponse("non post")
+
+
+def follow_user(request, username):
+    if request.method == 'POST':
+        user = User.objects.get(username=username)
+        data = json.loads(request.body)
+        follow = data.get('follow')
+        if(follow):
+            Follow.objects.filter(user=request.user, follow_user=user).delete()
+            datares = {'follow': 0}
+        else:
+            Follow.objects.create(user=request.user, follow_user=user)
+            datares = {'follow': 1}
+            
+        return JsonResponse(datares)
