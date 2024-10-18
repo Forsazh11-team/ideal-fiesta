@@ -506,8 +506,6 @@
         textArea.setAttribute('required', '');
         textArea.setAttribute('onclick', 'childClick(event);');
         textArea.value = content
-
-
         // Добавляем событие oninput для автоизменения размера
         textArea.setAttribute('oninput', 'autoResize(this)');
         textArea.addEventListener('keydown', function(event) {
@@ -520,7 +518,20 @@
                     textDisplay.textContent = this.value; // Текст для отображения
                     this.replaceWith(textDisplay);
                     // Дальше нужно изменить пост в бд
-
+                    fetch(`/tweet/${id}/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+                        },
+                        body: JSON.stringify({data: this.value}) // Отправляем статус лайка
+                    })
+                    /*.then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })*/
                 }
         });
         edit_area.replaceWith(textArea);
@@ -529,8 +540,27 @@
 
     // Пример функции удаления поста
     function deletePost(id) {
-        alert(`Удалить пост ${id}`);
-        // Здесь добавьте логику удаления
+        fetch(`/tweet/${id}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({}) // Отправляем статус лайка
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.Success == 1) {
+                location.reload()
+            } else {
+                throw new Error('error delete');
+            }
+        })
     }
 
     // Функция для открытия модального окна

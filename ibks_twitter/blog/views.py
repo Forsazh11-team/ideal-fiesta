@@ -168,10 +168,20 @@ def tweet_detail(request, tweet_id):
                 'tags': send_tags,
             }
             return JsonResponse(data)
+
     if request.method == 'PUT':
-        pass
+        #update tweet
+        data = json.loads(request.body)
+        new_body = data.get('data')
+        number = Tweet.objects.filter(id=tweet_id).update(content=new_body)
+        return JsonResponse(data)
+
     if request.method == 'DELETE':
-        pass
+        #minimal example delete tweet
+        tweet = get_object_or_404(Tweet, id=tweet_id)
+        tweet.delete()
+        data = {'Success': 1}
+        return JsonResponse(data)
 
 
 @require_POST
