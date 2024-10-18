@@ -183,7 +183,6 @@ def tweet_detail(request, tweet_id):
         data = {'Success': 1}
         return JsonResponse(data)
 
-
 @require_POST
 def like_tweet(request, tweet_id):
     data = json.loads(request.body)
@@ -264,3 +263,18 @@ def password_update(request):
             return HttpResponse(qwe)
     else:
         return HttpResponse("non post")
+
+
+def follow_user(request, username):
+    if request.method == 'POST':
+        user = User.objects.get(username=username)
+        data = json.loads(request.body)
+        follow = data.get('follow')
+        if(follow):
+            Follow.objects.filter(user=request.user, follow_user=user).delete()
+            datares = {'follow': 0}
+        else:
+            Follow.objects.create(user=request.user, follow_user=user)
+            datares = {'follow': 1}
+            
+        return JsonResponse(datares)

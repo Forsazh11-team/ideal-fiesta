@@ -411,6 +411,42 @@
         });
     }
 
+    function followingClick(event, username) {
+        event.stopPropagation(); // Останавливает всплытие события
+        const followBtn = document.getElementById(`flwBtn`);
+        const follow = followBtn.getAttribute('follow') === 'true';
+        console.log("follow = ", follow)
+        fetch(`/follow/${username}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Получаем CSRF-токен
+            },
+            body: JSON.stringify({'follow': follow})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if(data.follow == 1){
+                followBtn.setAttribute('follow', 'true');
+                followBtn.style.background='#704c9e';
+                console.log("Follow")
+            }
+            else{
+                followBtn.setAttribute('follow', 'false')
+                followBtn.style.background='#421954';
+                console.log("Unfollow")
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
     function ModallikeClick(event, tweetId) {
         const likeBtn = document.getElementById(`modal-likeBtn`);
         const likeCountSpan = document.getElementById(`modal-likes-count`);
@@ -526,12 +562,6 @@
                         },
                         body: JSON.stringify({data: this.value}) // Отправляем статус лайка
                     })
-                    /*.then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })*/
                 }
         });
         edit_area.replaceWith(textArea);
