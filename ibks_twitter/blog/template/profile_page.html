@@ -85,7 +85,7 @@
         </div>
         {% if flag_posts %}
          {% for tweet in tweets %}
-            <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }})">
+            <div class="post" id="post-{{tweet.id}}" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }})">
             <div class="post-author">
                 <img src="{{ tweet.author.profile.image.url }}">
                 <div>
