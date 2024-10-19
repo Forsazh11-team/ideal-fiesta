@@ -41,8 +41,8 @@
             </a>
             <form method="post" action="{% url 'logout' %}" class="profile-menu-links">
                 {% csrf_token %}
-                <img src="{% static 'img/logout.png' %}" alt="">
-                <button type="submit">Выход</button>
+                <img src="{% static 'img/logout.png' %}" alt="" id="exit-icon">
+                <button id="exit-button" class="invisible-button" type="submit">Выход</button>
             </form>
         </div>
     </div>
@@ -72,7 +72,7 @@
                         <span>Количество постов: <strong>{{tweets.count}}</strong></span>
                     </div>
                     {% if user.username != auth_user.username %}
-                    <button id="flwBtn" class="follow-button" follow="{% if flag_track %}false{% else %}true{% endif %}"
+                    <button id="flwBtn" class="follow-button {% if flag_track %}following{% else %}not-following{% endif %}" follow="{% if flag_track %}false{% else %}true{% endif %}"
                                 onclick="followingClick(event, '{{user.username}}')">
                             {% if flag_track %}
                                 Подписаться

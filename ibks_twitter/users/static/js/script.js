@@ -295,11 +295,16 @@
     window.onclick = function(event) {
         const modal = document.getElementById("tweetModal");
         const followings = document.getElementById("followingsModal");
+        const followers = document.getElementById("followersModal");
+
         if (event.target === modal) {
             closeModal();
         }
         if (event.target === followings) {
             closeFollowingsModal();
+        }
+        if (event.target === followers) {
+            closeFollowersModal();
         }
     }
 
@@ -622,3 +627,12 @@
         document.body.classList.remove('modal-open');
         document.getElementById("followersModal").style.display = "none";
     }
+
+    // Находим иконку и кнопку по ID
+    const icon = document.getElementById('exit-icon');
+    const button = document.getElementById('exit-button');
+
+    // Добавляем обработчик события нажатия на иконку
+    icon.addEventListener('click', function() {
+        button.click();  // "Нажимаем" кнопку через JS
+    });

@@ -30,10 +30,11 @@
                 <img src="{% static 'img/home.png' %}" alt="">
                 <p>На главную страницу</p>
             </a>
-            <a href="{% url 'logout' %}" class="profile-menu-links">
-                <img src="{% static 'img/logout.png' %}" alt="">
-                <p>Выход</p>
-            </a>
+            <form method="post" action="{% url 'logout' %}" class="profile-menu-links">
+                {% csrf_token %}
+                <img src="{% static 'img/logout.png' %}" alt="" id="exit-icon">
+                <button id="exit-button" class="invisible-button" type="submit">Выход</button>
+            </form>
         </div>
     </div>
    </nav>

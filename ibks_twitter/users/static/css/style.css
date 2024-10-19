@@ -998,7 +998,6 @@ body.modal-open {
 
 
 .follow-button {
-    background-color: #704c9e; /* Цвет фона кнопки */
     color: white; /* Цвет текста кнопки */
     padding: 10px 15px; /* Внутренние отступы кнопки */
     border-radius: 4px; /* Закругление углов кнопки */
@@ -1018,17 +1017,12 @@ body.modal-open {
     outline: none; /* Убираем обводку при фокусе */
 }
 
-.unfollow-button {
+.following {
+    background-color: #704c9e; /* Цвет фона кнопки */
+}
+
+.not-following {
     background-color: #421954; /* Цвет фона кнопки */
-    color: white; /* Цвет текста кнопки */
-    padding: 10px 15px; /* Внутренние отступы кнопки */
-    border-radius: 4px; /* Закругление углов кнопки */
-    transition: background-color 0.3s; /* Плавный переход цвета фона */
-    border: none;
-    outline: none;
-    display: flex;
-    justify-content: center;
-    font-size: 14px;
 }
 
 .stats-panel button:hover {
@@ -1136,3 +1130,11 @@ body.modal-open {
     cursor: pointer;
 }
 
+.invisible-button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+}
