@@ -68,7 +68,7 @@
         <a href ="/tweet" onclick="handleClick(event)"><div id="new_tweets"></div></a>
         {% if flag_posts %}
         {% for tweet in tweets %}
-        <div class="post" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
+        <div class="post" id="post-{{tweet.id}}" data-post-id="{{ tweet.id }}" onclick="openModal({{ tweet.id }});">
             <div class="post-author">
                 <a href="/profile/{{tweet.author.username}}" onclick="childClick(event);">
                     <img src=" {{ tweet.author.profile.image.url }}">
