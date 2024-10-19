@@ -279,3 +279,5 @@ def follow_user(request, username):
             datares = {'follow': 1}
             
         return JsonResponse(datares)
+
+

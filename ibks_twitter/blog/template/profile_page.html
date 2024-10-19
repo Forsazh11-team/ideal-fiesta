@@ -62,10 +62,10 @@
                 </div>
                 <div class="stats-panel">
                     <div class="stat-item">
-                        <span class="clickable-text" onclick="openFollowersModal();">Подписчики: <strong>{{user.profile.followers}}</strong></span>
+                        <span class="clickable-text" onclick="openFollowersModal();">Подписчики: <strong>{{user.profile.followers.count}}</strong></span>
                     </div>
                     <div class="stat-item">
-                        <span class="clickable-text" onclick="openFollowingsModal();">Подписки: <strong>{{user.profile.following}}</strong></span>
+                        <span class="clickable-text" onclick="openFollowingsModal();">Подписки: <strong>{{user.profile.following.count}}</strong></span>
                     </div>
                     <div class="stat-item">
                         <span>Количество постов: <strong>{{tweets.count}}</strong></span>
@@ -189,11 +189,11 @@
         <span class="close" onclick="closeFollowingsModal()">&times;</span>
         <h2>Подписки</h2>
         <ul class="subscriptions-list">
-            {% for user in object_list %}
+            {% for qwe in user.profile.following %}
             <li class="subscription-item">
-                <button onclick="location.href='/profile/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
-                <div class="user-avatar"><img src="{{ user.follow_user.profile.image.url }}"></div>
-                <span>{{ user.follow_user.username }}</span>
+                <button onclick="location.href='/profile/{{qwe.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
+                <div class="user-avatar"><img src="{{ qwe.follow_user.profile.image.url }}"></div>
+                <span>{{ qwe.follow_user.username }}</span>
                 </button>
                 </li>
             </li>
@@ -207,11 +207,11 @@
         <span class="close" onclick="closeFollowersModal()">&times;</span>
         <h2>Подписчики</h2>
         <ul class="subscriptions-list">
-            {% for user in object_list %}
+            {% for qwe in user.profile.followers %}
             <li class="subscription-item">
-                <button onclick="location.href='/profile/{{user.follow_user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
-                <div class="user-avatar"><img src="{{ user.follow_user.profile.image.url }}"></div>
-                <span>{{ user.follow_user.username }}</span>
+                <button onclick="location.href='/profile/{{qwe.user.username}}'" style="display: flex; align-items: center; border: none; background: none; cursor: pointer;">
+                <div class="user-avatar"><img src="{{ qwe.user.profile.image.url }}"></div>
+                <span>{{ qwe.user.username }}</span>
                 </button>
                 </li>
             </li>
