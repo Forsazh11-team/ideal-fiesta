@@ -76,7 +76,7 @@
                 </a>
                 <div>
                     <a href="/profile/{{tweet.author.username}}" onclick="childClick(event);"><h1>{{tweet.author.username}}</h1></a>
-                    <small>{{tweet.date_posted}}</small>
+                    <small>{{ tweet.date_posted|date:"d F Y H:i" }}</small>
                 </div>
                 {% if tweet.author.username == user.username %}
                 <button class="edit-delete-btn" id="edit-delete-btn-{{tweet.id}}" onclick="childClick(event);">

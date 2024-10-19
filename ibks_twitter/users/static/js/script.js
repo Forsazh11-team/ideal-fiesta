@@ -68,9 +68,16 @@
                     authorName.textContent = response.author_username;
                     authorLink.appendChild(authorName);
 
-                    var postDate = document.createElement('small');
-                    postDate.textContent = response.date_posted;
+                    var date = new Date(response.date_posted);
 
+                    var postDate = document.createElement('small');
+                    postDate.textContent = date.toLocaleString('ru-RU', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    });
                     // Собираем блок автора
                     authorInfo.appendChild(authorLink);
                     authorInfo.appendChild(postDate);
@@ -207,7 +214,14 @@
             // Заполнение модального окна данными твита
             document.getElementById('modal-author').textContent = data.author;
             document.getElementById('modal-content').textContent = data.content;
-            document.getElementById('modal-date').textContent = data.date_posted;
+            var post_date = new Date(data.date_posted);
+            document.getElementById('modal-date').textContent = post_date.toLocaleString('ru-RU', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    });;
             var link = document.getElementById('author-link');
             link.setAttribute("href", `/profile/${data.author}`)
             var imglink = document.getElementById('img-author-link');
@@ -268,7 +282,15 @@
                 var commentContent = $('<div>').addClass('comment-content');
                 var commentAuthor = $('<strong>').text(comment.author); // текстовое содержимое
                 var commentText = $('<p>').text(comment.content); // текстовое содержимое
-                var commentDate = $('<span>').addClass('comment-date').text(comment.date_posted);
+                var date = new Date(comment.date_posted);
+                date = date.toLocaleString('ru-RU', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    });;
+                var commentDate = $('<span>').addClass('comment-date').text(date);
 
                 // Сборка комментария
                 commentContent.append(commentAuthor, commentText, commentDate);
