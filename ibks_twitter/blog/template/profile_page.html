@@ -39,10 +39,11 @@
                 <img src="{% static 'img/settings.png' %}" alt="">
                 <p>Настройки</p>
             </a>
-            <a href="{% url 'logout' %}" class="profile-menu-links">
+            <form method="post" action="{% url 'logout' %}" class="profile-menu-links">
+                {% csrf_token %}
                 <img src="{% static 'img/logout.png' %}" alt="">
-                <p>Выход</p>
-            </a>
+                <button type="submit">Выход</button>
+            </form>
         </div>
     </div>
    </nav>
