@@ -23,11 +23,11 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
     @property
     def followers(self):
-        return Follow.objects.filter(follow_user=self.user).count()
+        return Follow.objects.filter(follow_user=self.user)
 
     @property
     def following(self):
-        return Follow.objects.filter(user=self.user).count()
+        return Follow.objects.filter(user=self.user)
 
     def save(self, force_insert=False, force_update=False, using=None,update_fields=None):
         super().save()

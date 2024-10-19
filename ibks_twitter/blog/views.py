@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
@@ -132,7 +133,7 @@ def create_tweet(request):
         form = TweetForm(request.POST)
     return redirect('/home')
 
-
+@login_required
 def tweet_detail(request, tweet_id):
     if request.method == 'GET':
         tweet = get_object_or_404(Tweet, id=tweet_id)  # Убедитесь, что используете tweet_id здесь
@@ -278,3 +279,5 @@ def follow_user(request, username):
             datares = {'follow': 1}
             
         return JsonResponse(datares)
+
+
