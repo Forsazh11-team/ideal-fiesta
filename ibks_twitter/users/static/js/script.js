@@ -433,14 +433,14 @@
         .then(data => {
             if(data.follow == 1){
                 followBtn.setAttribute('follow', 'true');
-                followBtn.style.background='#704c9e';
-                followBtn.textContent = "Подписаться"
+                followBtn.style.background='#421954';
+                followBtn.textContent = "Отписаться"
                 console.log("Follow")
             }
             else{
                 followBtn.setAttribute('follow', 'false')
-                followBtn.style.background='#421954';
-                followBtn.textContent = "Отписаться"
+                followBtn.style.background='#704c9e';
+                followBtn.textContent = "Подписаться"
                 console.log("Unfollow")
             }
         })
